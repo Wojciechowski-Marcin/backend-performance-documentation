@@ -1,0 +1,15 @@
+\begin{algorithm}[H]
+    populate database\;
+    store snapshot\;
+    \ForEach{test case}{
+        \If{application is running}{kill application\;}
+        remove volumes\;
+        \If{test case is not post}{restore snapshot\;}
+        start application\;
+        \While{application is not responding}{wait for application\;}
+        \For{5 seconds}{warmup requests\;}
+        \For{45 seconds}{measured test\;}
+        store result\;
+    }
+    merge results\;
+\end{algorithm}

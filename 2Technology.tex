@@ -1,0 +1,65 @@
+\chapter{Technology description}
+
+\section{Django}
+
+\subsection{Overview}
+Django lets you build deep, dynamic, interesting sites in an extremely short time. Django is designed to let you focus on the fun, interesting parts of your job while easing the pain of the repetitive bits \cite{djangobook}. Additionally the framework is being supported by a wide variety of libraries and frameworks, like Django Rest Framework, Django Celery, Crispy Forms.
+
+\subsection{Architecture}
+Django is based on MVC architecture:
+\begin{itemize}
+    \item Model - a data structure, represented by a database
+    \item View - responses visible in the browser
+    \item Controller - connects Model and View together - describes how the data should be presented to the user
+\end{itemize}
+In Django application there are multiple files and at first it may not be obvious what their role is. Basic structure looks like this:
+\begin{itemize}
+    \item apps.py - common to all django apps configuration file
+    \item models.py - custom models
+    \item serializers.py - define how our model objects should be converted into response
+    \item views.py - custom controllers, which is unintuitive for most of people; as the developers explain, in their interpretation of MVC the view describes which data gets presented to the user \cite{djangoWhyViews}
+    \item urls.py - defines which endpoint responds to given controller
+\end{itemize}
+Templates, which are not mentioned above, are the Django's custom views - in our case, I am going to be using build in json parsers.
+
+\subsection{Requirements}
+To install and run a simple Django project, two main things are required:
+\begin{itemize}
+    \item pip (easiest install method)
+    \item Python
+\end{itemize}
+
+
+\section{ExpressJS}
+
+\subsection{Overview}
+\subsection{Architecture}
+\subsection{Requirements}
+
+
+\section{ASP.NET}
+
+\subsection{Overview}
+\subsection{Architecture}
+\subsection{Requirements}
+
+\section{K6 and related tools}
+
+For testing the performance of applications, I chose a tool named k6. It is a modern load testing tool written in Golang, which provides clean and well documented APIs for writing and running tests, while still being easily configurable to the developers needs. Test logic and configuration options are both to be written in JavaScript, which allows developers for using JavaScript modules, which aids in code reusability. The creators of k6 prepared two types of execution:
+\begin{itemize}
+    \item local, through command line interface
+    \item and cloud, which is a commercial SaaS product, made to make performance testing in bigger applications easier.
+\end{itemize}
+For the sake of this experiment, local testing has fulfilled all expectations.
+
+Installation on Ubuntu operating system is fairly simple and all necessary commands were described in the documentation. However, to make the testing simpler, a k6 Docker image was used, that together with Docker Compose allowed to create a single script that would handle all test cases as described in the following section.
+
+K6 allows to create visualizations, using built-in InfluxDB and Grafana integration, where InfluxDB is used as storage backend and Grafana to visualize the data. In this research, only InfluxDB was added to store the data and after each test the data was exported to file, which later allowed to compare the results between applications on a single chart.
+
+\section{Docker and Docker Compose}
+
+Docker and Docker Compose were used to simplify the development. This made starting all services that had be run together possible with only one command, eg. for django performance tests - django, postgres, k6 and influx. For every application a production ready Dockerfile was created. Additionally, Docker provides applications a layer of isolation from each other and the host.
+
+\section{PostgreSQL}
+
+For the Database Management System I chose PostgreSQL, which is the second most popular choice among database technologies %TODO link to dev survey

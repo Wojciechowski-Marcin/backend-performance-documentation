@@ -1,0 +1,104 @@
+\documentclass[mgr, oneside, en]{mgr}
+\usepackage{listingsutf8}
+
+\usepackage{booktabs, multirow} % for borders and merged ranges
+\usepackage{soul}% for underlines
+\usepackage[table]{xcolor} % for cell colors
+\usepackage{changepage,threeparttable} % for wide tables
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{psfrag}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{supertabular}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{hhline}
+
+\usepackage{listings}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{float}
+
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+
+\newfloat{pseudocode}{thp}{lop}[chapter]
+\floatname{pseudocode}{Pseudokod}
+
+\input{dockerlistings.tex}
+
+%pakiet wypisujący na marginesie etykiety równań i rysunków zdefiniowanych przez \label{}, chcąc wygenerować finalną wersję dokumentu wystarczy usunąć poniższą linię
+% \usepackage{showlabels}
+
+%definicje własnych poleceń
+\newcommand{\R}{I\!\!R} %symbol liczb rzeczywistych, działa tylko w trybie matematycznym
+\newtheorem{theorem}{Twierdzenie}[section] %nowe otoczenie do składania twierdzeń
+\renewcommand\lstlistlistingname{List of Code Listings}
+
+% STRONA TYTULOWA
+\title{Analiza porównawcza i ocena wydajności frameworków back-endowych w
+aplikacjach bazodanowych}
+\engtitle{Comparison analysis and efficiency evaluation of back-end frameworks in
+database applications}
+\author{Marcin Wojciechowski}
+\supervisor{Dr inż. Paweł Głuchowski W4/K9}
+%\guardian{Dr inż. Paweł Trajdos} %nie używać jeśli opiekun jest tą samą osobą co prowadzący pracę
+
+\date{2021}
+
+\field{Informatyka Techniczna (INF) //TODO}
+\specialisation{Internet Engineering (INE)}
+
+\begin{document}
+
+\bibliographystyle{plabbrv}
+
+\maketitle
+
+% DEDYKACJA
+% \dedication{6cm}{To jest przykładowa treść opcjonalnej dedykacji, należy ją zmienić lub usunąć w całości polecenie \texttt{$\backslash$dedication}}
+
+\tableofcontents
+
+%
+%
+% TRESC PRACY
+%
+%
+
+\input{1Wstep.tex}
+
+\input{2Technology}
+
+\input{3Criteria}
+
+\input{4Design}
+
+\input{5Implementation}
+
+\input{6Results}
+
+\input{7Conclusion}
+
+% \appendix
+% \chapter{Donec cursus nulla vitae pede}
+
+\addcontentsline{toc}{chapter}{\bibname} %utworzenie w spisie treści pozycji Literatura
+\bibliography{bibliografia} % wstawia bibliografię korzystając z pliku bibliografia.bib - dotyczy BibTeXa, jeżeli nie korzystamy z BibTeXa należy użyć otoczenia thebibliography
+
+% \addcontentsline{toc}{chapter}{Listingi}
+\listoffigures
+\lstlistoflistings
+\listof{pseudocode}{List of Pseudocodes}
+\end{document}
