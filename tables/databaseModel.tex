@@ -6,13 +6,16 @@
 %If the table is too wide, replace \begin{table}[!htp]...\end{table} with
 %\begin{adjustwidth}{-2.5 cm}{-2.5 cm}\centering\begin{threeparttable}[!htb]...\end{threeparttable}\end{adjustwidth}
 \begin{table}[!htp]\centering
-    \caption{Framework versoins}\label{tab:software}
+    \caption{Database model}\label{tab:dbModel}
     \scriptsize
     \begin{tabular}{lrr}\toprule
-        Framework versions &        \\\midrule
-        Django             & 3.1.4  \\
-        ASP.NET            & 2.1.1  \\
-        Express            & 4.17.1 \\
+        User         &         \\\midrule
+        id           & integer \\
+        username*    & string  \\
+        email*       & string  \\
+        first\_name* & string  \\
+        last\_name*  & string  \\
+        password*    & string  \\
         \bottomrule
     \end{tabular}
 \end{table}

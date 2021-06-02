@@ -6,5 +6,10 @@
     "editor.wrappingIndent": "same",
     "latex-workshop.debug.showUpdateMessage": false,
     "telemetry.enableCrashReporter": false,
-    "telemetry.enableTelemetry": false
+    "telemetry.enableTelemetry": false,
+    "cSpell.words": [
+        "cooldown"
+    ],
+    "todo-tree.regex.regex": "% (TODO) .*",
+    "todo"
 }

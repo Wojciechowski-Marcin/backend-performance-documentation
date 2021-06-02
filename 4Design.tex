@@ -4,7 +4,20 @@
 
 \section{Database}
 
-For the tests, a database consisting of a single table was created. 
+For the tests, a database consisting of a single table was created - a model is presented in a table \ref{tab:dbModel}.
+
+\input{tables/databaseModel.tex}
+
+For every application the operations on the PostgreSQL database may be slightly different, since in Django and ASP.NET they are handled by the Object-Relational Mapping libraries, while Express works on sql statements.
+
+% TODO PG env variables
+
+\subsection{Database connection and initiation}
+
+Django handles a lot of things for the user - connection is very simple - in initial project generation a file settings.py is created, which consists of all the necessary variables for the system to work. In the file we can find a variable named Databases, initially with sqlite backend. All that needs to be done to connect to our PostgreSQL is to change the engine to built-in PG backend and change the remaining fields - name, user, password, host and port. With that done, the connection is automatically done on the system startup.
+
+\subsection{Initial population creation}
+\subsection{Operations on users}
 
 \section{Application}
 \section{Environment}

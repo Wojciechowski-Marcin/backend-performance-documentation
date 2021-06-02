@@ -15,21 +15,36 @@ The task for each application is to complete simple CRUD operations as fast as p
     \item deleting a single object (delete)
 \end{itemize}
 
-Scenarios were tested with a few different application loads, which are represented by a number of virtual users (VUs) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops. 
+Scenarios were tested with a few different application loads, which are represented by a number of virtual users (VUs) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops.
 % TODO annotation to k6 repo
+The numbers chosen for tests are:
+\begin{itemize}
+    \item 1 VU
+    \item 8 VUs
+    \item 32 VUs
+    \item 128 VUs
+    \item 512 VUs
+\end{itemize}
+For a single virtual user case the number of concurrences does not change throughout the duration of the test, however, as suggested in
+% TODO find article that suggests this
+, for bigger numbers of concurrent users, the tests should include warmup and cooldown period. All tests are 45 seconds long, and tests with more than 1 virtual user include 15 seconds of ramp up time and 15 seconds of ramp down time as shown on figure \ref{fig:vusPerSecond}.
+
+Longer test times did not bring any valuable information and only brought CPU overheating problems, thus they were shortened, which also made work with the results much easier.
+
+\begin{figure}[H]
+    \includegraphics[width=\columnwidth]{pictures/vusPerSecond.png}
+    \caption{Amount of VUs per second during the tests}
+    \label{fig:vusPerSecond}
+\end{figure}
 
 
 \subsection{Database snapshots}
 
-To avoid any differences in the database between the tests, at the beginning of the script the database is populated and the snapshot is stored locally. Before each test, the snapshot is restored.
-
-% TODO add listing from script to the create and restore snapshot functions
+To avoid any differences in the database between the tests, at the beginning of the tests the database is populated and the snapshot is stored locally. Before each test, the snapshot is restored.
 
 \subsection{Application isolation}
 
-To be sure that the applications are running in an isolated environment, docker containers were used. To simplify the research, a Docker Compose configuration was prepared, that builds and starts all the necessary containers at once.
-
-% TODO reference docker-compose script, write about the dockerfiles
+To be sure that the applications are running in an isolated environment, docker containers were used. The configuration prepared for the applications included environment preparation (installing necessary packages, providing environment variables), To simplify the research, a Docker Compose configuration was prepared, that builds and starts all the necessary containers at once.
 
 \subsection{Test progress}
 
@@ -39,11 +54,11 @@ The measures are gathered from each application in the following manner:
 
 \subsection{Software versions and hardware}
 
-The tests were run on a laptop with the following specification:
+The tests were run on a laptop with the specification presented in table \ref{tab:hardware}.
+Frameworks used to build the application were in the versions presented in table \ref{tab:software}.
 
 \input{tables/hardware}
 
-Frameworks used to build the application were in the following versions:
 
 \input{tables/software}
 
