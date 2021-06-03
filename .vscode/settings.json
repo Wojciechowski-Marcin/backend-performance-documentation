@@ -10,6 +10,6 @@
     "cSpell.words": [
         "cooldown"
     ],
-    "todo-tree.regex.regex": "% (TODO) .*",
+    "todo-tree.regex.regex": "% (TODO) .*$",
     "todo"
 }
