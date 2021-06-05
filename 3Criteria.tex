@@ -5,7 +5,7 @@
 \section{Performance benchmark}
 
 \subsection{Scenarios}
-The task for each application is to complete simple CRUD operations as fast as possible. For comparison of the performance of the applications, a few scenarios were developed:
+The task for each application is to complete simple \acrshort{crud} operations as fast as possible. For comparison of the performance of the applications, a few test cases were developed:
 
 \begin{itemize}
     \item retrieving multiple objects (getMany)
@@ -15,21 +15,23 @@ The task for each application is to complete simple CRUD operations as fast as p
     \item deleting a single object (delete)
 \end{itemize}
 
-Scenarios were tested with a few different application loads, which are represented by a number of virtual users (VUs) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops.
-% TODO annotation to k6 repo
-The numbers chosen for tests are:
+They were tested with a few different application loads, which are represented by a number of virtual users (\acrshort{vu}s) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops.
+% TODO ref to k6 repo
+The scenarios chosen for tests are:
 \begin{itemize}
-    \item 1 VU
-    \item 8 VUs
-    \item 32 VUs
-    \item 128 VUs
-    \item 512 VUs
+    \item 1 \acrshort{vu}
+    \item 8 \acrshort{vu}s
+    \item 32 \acrshort{vu}s
+    \item 128 \acrshort{vu}s
+    \item 512 \acrshort{vu}s
 \end{itemize}
 For a single virtual user case the number of concurrences does not change throughout the duration of the test, however, as suggested in
 % TODO find article that suggests this
 , for bigger numbers of concurrent users, the tests should include warmup and cooldown period. All tests are 45 seconds long, and tests with more than 1 virtual user include 15 seconds of ramp up time and 15 seconds of ramp down time as shown on figure \ref{fig:vusPerSecond}.
 
-Longer test times did not bring any valuable information and only brought CPU overheating problems, thus they were shortened, which also made work with the results much easier.
+Longer test times did not bring any satisfactory results and only caused CPU throttling problems, thus they were shortened to the period of 45 total seconds, which also made comparison of the results much easier.
+
+For one scenario the results could be slightly different, that is why every test was repeated 10 times. For creation of the graphs presented in chapter \ref{chapter:7} for each test an average response times were calculated. % TODO ref chapter 7 
 
 \begin{figure}[H]
     \includegraphics[width=\columnwidth]{pictures/vusPerSecond.png}
@@ -38,9 +40,9 @@ Longer test times did not bring any valuable information and only brought CPU ov
 \end{figure}
 
 
-\subsection{Database snapshots}
+\subsection{Data}
 
-To avoid any differences in the database between the tests, at the beginning of the tests the database is populated and the snapshot is stored locally. Before each test, the snapshot is restored.
+For the performance tests some frameworks required initial data to exist in the database (for example PUT endpoint for editing database models), thus at the beginning of the tests for each framework the database is populated. To be sure that the data is consistent, after seeding the database the docker volume that keeps the data is being stored locally, and before each test it is being restored.
 
 \subsection{Application isolation}
 
@@ -48,7 +50,7 @@ To be sure that the applications are running in an isolated environment, docker 
 
 \subsection{Test progress}
 
-The measures are gathered from each application in the following manner:
+The main script prepared for this thesis, that gathers all the measurements is described in the algorithm \ref{alg:testProgress}.
 
 \input{pseudocodes/testProgress}
 
@@ -58,7 +60,6 @@ The tests were run on a laptop with the specification presented in table \ref{ta
 Frameworks used to build the application were in the versions presented in table \ref{tab:software}.
 
 \input{tables/hardware}
-
 
 \input{tables/software}
 

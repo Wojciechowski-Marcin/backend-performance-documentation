@@ -30,6 +30,11 @@
 \usepackage{caption}
 \usepackage{float}
 
+\usepackage[utf8]{inputenc}
+\usepackage[acronym]{glossaries}
+
+\input{glossaries.tex}
+
 \renewcommand{\labelenumii}{\theenumii}
 \renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
 
@@ -58,6 +63,7 @@ database applications}
 \date{2021}
 
 \field{Informatyka Techniczna (INF)} % TODO find INF english name
+
 \specialisation{Internet Engineering (INE)}
 
 \begin{document}
@@ -76,6 +82,10 @@ database applications}
 % TRESC PRACY
 %
 %
+
+
+\addcontentsline{toc}{chapter}{Acronyms}
+\printnoidxglossaries
 
 \input{1Wstep.tex}
 
@@ -96,9 +106,11 @@ database applications}
 
 \addcontentsline{toc}{chapter}{\bibname} %utworzenie w spisie treści pozycji Literatura
 \bibliography{bibliografia} % wstawia bibliografię korzystając z pliku bibliografia.bib - dotyczy BibTeXa, jeżeli nie korzystamy z BibTeXa należy użyć otoczenia thebibliography
-
-% \addcontentsline{toc}{chapter}{Listingi}
+\addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
+\addcontentsline{toc}{chapter}{List of Code Listings}
 \lstlistoflistings
-\listof{pseudocode}{List of Pseudocodes}
+\addcontentsline{toc}{chapter}{List of Algorithms}
+\listofalgorithms
+
 \end{document}

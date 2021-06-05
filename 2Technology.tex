@@ -12,53 +12,61 @@ For the Database Management System I chose PostgreSQL, which is the second most 
 \subsection{Overview}
 Django is a high-level Python web framework, that allows programmers build dynamic, interesting sites in an extremely short time. Django is designed to let you focus on the fun, interesting parts of your job while easing the pain of the repetitive bits \cite{djangobook}. Additionally the framework is being supported by a wide variety of libraries and frameworks, like Django Celery, Crispy Forms, Django Rest Framework.
 
-Django is based on MVC architecture:
+Django is based on \acrshort{mvc} architecture:
 \begin{itemize}
     \item Model - a data structure, represented by a database
     \item View - interfaces visible in the browser
     \item Controller - connects Model and View together - describes how the data should be presented to the user
 \end{itemize}
-In Django application there are multiple files and at first it may not be obvious what their role is. Basic structure looks like this:
+In Django application there are multiple files and at first it may not be obvious what their role is. Basic structure of an application looks like this:
 \begin{itemize}
     \item apps.py - common to all django apps configuration file
     \item models.py - custom models
     \item serializers.py - define how our model objects should be converted into response
-    \item views.py - custom controllers, which is not intuitive for most of people; as the developers explain, in their interpretation of MVC the view describes which data gets presented to the user \cite{djangoWhyViews}
+    \item views.py - custom controllers, which is not intuitive for most of people; as the developers explain, in their interpretation of \acrshort{mvc} the view describes which data gets presented to the user \cite{djangoWhyViews}
     \item urls.py - defines which endpoint responds to given controller
 \end{itemize}
 Templates, which are not mentioned above, are the Django's custom views - in case of application for my tests, it is going to be using build in json parsers.
 
 \subsection{Requirements and dependencies}
-Fortunately Django has a built in PostgreSQL engine, so no additional packages need to be added for this to work. However, for the sake of this research, a popular package Django Rest Framework package was added (over 21k stars on github), as it provides well thought set of base components for building APIs, often reducing the amount of code that needs to be written.
+Fortunately Django has a built in PostgreSQL engine, so no additional packages need to be added for this to work. However, for the sake of this research, a popular package Django Rest Framework package was added (over 21k stars on github), as it provides well thought set of base components for building \acrshort{api}s, often reducing the amount of code that needs to be written.
 Deploying django can be currently done by two interfaces:
 \begin{itemize}
-    \item WSGI, which is the main Python standard for communicating between servers and applications
-    \item and ASGI, which is new, asynchronous-friendly standard, allowing to use asynchronous Python features (and Django features as they are developed) \ref{deploying-django}
+    \item \acrshort{wsgi}, which is the main Python standard for communicating between servers and applications
+    \item and \acrshort{asgi}, which is new, asynchronous-friendly standard, allowing to use asynchronous Python features (and Django features as they are developed) \ref{deploying-django}
 \end{itemize}
 % TODO Add references https://docs.djangoproject.com/en/3.2/howto/deployment/#deploying-django
 
-Since the applications will be tested under a heavy load, the logical choice was the ASGI interface. As recommended in the documentation \ref{deploying-django}, deploying an application with ASGI can be done using Uvicorn, which is a fast ASGI server implementation \ref{uvicorn.org}, which results in two additional packages being added to the list of requirements.
+Since the applications will be tested under a heavy load, the logical choice was the \acrshort{asgi} interface. As recommended in the documentation \ref{deploying-django}, deploying an application with \acrshort{asgi} can be done using Uvicorn, which is a fast \acrshort{asgi} server implementation \ref{uvicorn.org}, which results in two additional packages being added to the list of requirements.
 
 \section{ExpressJS}
 
 \subsection{Overview}
 
-To describe what ExpressJS is, it would be appropriate to introduce Node.js. Node is an open-source runtime environment that runs on the same engine as the JavaScript in the browsers, but it allows developers to build server-side tools and applications. Node package manager (NPM) provides hundreds of thousands of packages, and that is where we can find Express. % TODO ref https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Introduction
-Express is the most popular web framework with almost 17 million weekly downloads from NPM. It provides mechanisms to write handlers for HTTP requests, integrate with rendering engines and handle middlewares. The minimalism of the framework is compensated by huge supply of third party libraries, which are a giant expansion to it's functionality.
+To describe what Express.js is, it would be appropriate to introduce Node.js. Node is an open-source runtime environment that runs on the same engine as the JavaScript in the browsers, but it allows developers to build server-side tools and applications. Node package manager (\acrshort{npm}) provides hundreds of thousands of packages, and that is where we can find Express. % TODO ref https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Introduction
+
+Express is the most popular web framework with almost 17 million weekly downloads from \acrshort{npm}. It provides mechanisms to write handlers for \acrshort{http} requests, integrate with rendering engines and handle middlewares. The minimalism of the framework is compensated by huge supply of third party libraries, which are a giant expansion to it's functionality.
+
+Express.js is an unopinionated framework, which means theres more than one "right" way to achieve a given result - there is no strict architecture that the developer has to follow.
 
 \subsection{Requirements}
-Application for the research in this thesis is very minimalistic itself, hence there are not many additional packages that need to be added. There is only one bundle downloaded from the NPM repository, which is pg-promise. Initially it was a package that expanded the base library - node-postgres by adding promises to the base driver, but since then the library's functionality was vastly expanded. % TODO ref https://github.com/vitaly-t/pg-promise
+Application for the research in this thesis is very minimalistic itself, hence there are not many additional packages that need to be added. There is only one bundle downloaded from the \acrshort{npm} repository, which is pg-promise. Initially it was a package that expanded the base library - node-postgres by adding promises to the base driver, but since then the library's functionality was vastly expanded. % TODO ref https://github.com/vitaly-t/pg-promise
 The expanded version of the driver was chosen, because of it's popularity - at the day of accessing the libraries the number of weekly downloads of node-postgres (2k) was only a tiny fraction of pg-promise's (172k). % TODO ref https://www.npmjs.com/package/pg-promise https://www.npmjs.com/package/node-postgres
 
-\section{ASP.NET}
+\section{ASP.NET Core}
 
 \subsection{Overview}
-\subsection{Architecture}
+ASP.NET Core is an open-source framework for building modern Internet-connected applications. With it you can build web applications and services, IoT apps, and mobile backends. "Core" is an a new, upgraded version of ASP.NET - it includes architectural changes, that result in more modular framework. % TODO ref https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core
+
+ASP.NET Core \acrshort{mvc} is a framework optimized for use with ASP.NET Core, that allows to build \acrshort{api}s and web applications using Model-View-Controller pattern. % TODO ref https://docs.microsoft.com/en-us/aspnet/core/mvc/overview
+
 \subsection{Requirements}
+
+To have the PostgreSQL support in the application, it is necessary to add \acrshort{pg} provider for the framework - Npgsql.EntityFrameworkCore.PostgreSQL.
 
 \section{K6 and related tools}
 
-For testing the performance of applications, I chose a tool named k6. It is a modern load testing tool written in Golang, which provides clean and well documented APIs for writing and running tests, while still being easily configurable to the developers needs. Test logic and configuration options are both to be written in JavaScript, which allows developers for using JavaScript modules, which aids in code reusability. The creators of k6 prepared two types of execution:
+For testing the performance of applications, a tool named k6 was chosen. It is a modern load testing tool written in Golang, which provides clean and well documented \acrshort{api}s for writing and running tests, while still being easily configurable to the developers needs. Test logic and configuration options are both to be written in JavaScript, which allows developers for using JavaScript modules, which aids in code reusability. The creators of k6 prepared two types of execution:
 \begin{itemize}
     \item local, through command line interface
     \item and cloud, which is a commercial SaaS product, made to make performance testing in bigger applications easier.
@@ -71,4 +79,4 @@ K6 allows to create visualizations, using built-in InfluxDB and Grafana integrat
 
 \section{Docker and Docker Compose}
 
-Docker and Docker Compose were used to simplify the development. This made starting all services that had be run together possible with only one command, eg. for django performance tests - django, postgres, k6 and influx. For every application a production ready Dockerfile was created. Additionally, Docker provides applications a layer of isolation from each other and the host.
+Docker is a software that allows virtualization on an operating system level (containerization). Containers wrap the applications code in a small virtual environment based on the provided configuration. Docker and Docker Compose were used to simplify the development. This made starting all services that had be run together possible with only one command, eg. for django performance tests - django, postgres, k6 and influx. For every application a production ready Dockerfile was created. Additionally, Docker provides applications a layer of isolation from each other and the host.

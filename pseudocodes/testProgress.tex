@@ -1,15 +1,30 @@
 \begin{algorithm}[H]
-    populate database\;
-    store snapshot\;
-    \ForEach{test case}{
-        \If{application is running}{kill application\;}
-        remove volumes\;
-        \If{test case is not post}{restore snapshot\;}
-        start application\;
-        \While{application is not responding}{wait for application\;}
-        \For{5 seconds}{warmup requests\;}
-        \For{45 seconds}{measured test\;}
-        store result\;
+    \label{alg:testProgress}
+    \caption{Pseudocode describing load testing process}
+
+    frameworks = [aspnet django express]\;
+    scenarios = [1 8 32 128 512]\;
+    iterations = [1 2 3 4 5 6 7 8 9 10]\;
+    test cases = [get post put delete getMany]\;
+
+    \ForAll{frameworks}{
+        populate database\;
+        store snapshot\;
+        \ForAll{scenarios}{
+            \ForAll{iterations}{
+                \ForAll{test cases}{
+                    \If{application is running}{kill application\;}
+                    remove volumes\;
+                    \If{test case is not post}{restore snapshot\;}
+                    start application\;
+                    \While{application is not responding}{wait for application\;}
+                    \For{45 seconds}{measured test\;}
+                    store k6 result \;
+                    store influxDB result \;
+                    \For{20 seconds}{cooldown \;}
+                }
+            }
+        }
     }
     merge results\;
 \end{algorithm}

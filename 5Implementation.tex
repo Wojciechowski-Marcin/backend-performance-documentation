@@ -3,6 +3,10 @@
 \chapter{Application implementation}
 
 \section{Django}
+
+\subsection{Database connection and initiation}
+
+Django handles a lot of things for the user - connection is very simple - in initial project generation a file settings.py is created, which consists of all the necessary variables for the system to work. In the file we can find a variable named Databases, initially with SQLite backend. All that needs to be done to connect to our PostgreSQL is to change the engine to built-in \acrshort{pg} backend and change the remaining fields - name, user, password, host and port. With that done, the connection is automatically done on the system startup.
 % https://dev.to/anujdev/django-development-using-docker-as-host-part-1-dockerfile-3bnc
 \section{Express}
 \section{ASP.NET}

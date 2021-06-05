@@ -8,16 +8,24 @@ For the tests, a database consisting of a single table was created - a model is 
 
 \input{tables/databaseModel.tex}
 
-For every application the operations on the PostgreSQL database may be slightly different, since in Django and ASP.NET they are handled by the Object-Relational Mapping libraries, while Express works on sql statements.
+For every application the operations on the PostgreSQL database may be slightly different, since in Django and ASP.NET they are handled by the Object-Relational Mapping libraries, while Express works on SQL statements.
 
-% TODO PG env variables
-
-\subsection{Database connection and initiation}
-
-Django handles a lot of things for the user - connection is very simple - in initial project generation a file settings.py is created, which consists of all the necessary variables for the system to work. In the file we can find a variable named Databases, initially with sqlite backend. All that needs to be done to connect to our PostgreSQL is to change the engine to built-in PG backend and change the remaining fields - name, user, password, host and port. With that done, the connection is automatically done on the system startup.
+Database creation is based on environment variables, as it makes it easier for connecting the applications to the database later. For the connection, the following variables need to be present:
+\begin{itemize}
+    \item POSTGRES\_DB, which is the name of the database, set to postgres,
+    \item POSTGRES\_USER, the default database user, set to postgres,
+    \item POSTGRES\_PASSWORD as the defaults' user password, set to postgres,
+    \item POSTGRES\_HOST required only for applications - it is the hostname where the database can be found - because of how the docker networks work, it needs to be set to the container name - postgres,
+    \item POSTGRES\_PORT which is the port on which the database is exposed - set to 5432
+\end{itemize}
 
 \subsection{Initial population creation}
+
+For every application the script responsible for seeding the database looks basically the same, but obviously the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script, to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
+
 \subsection{Operations on users}
 
-\section{Application}
+\section{Applications}
 \section{Environment}
+
+Before the application starts, the database needs to be running. That is why docker compose configuration contains a healthcheck for \acrshort{pg}

@@ -9,13 +9,13 @@
     \caption{Database model}\label{tab:dbModel}
     \scriptsize
     \begin{tabular}{lrr}\toprule
-        User         &         \\\midrule
-        id           & integer \\
-        username*    & string  \\
-        email*       & string  \\
-        first\_name* & string  \\
-        last\_name*  & string  \\
-        password*    & string  \\
+        User        &                             \\\midrule
+        id          & serial not null primary key \\
+        password    & varchar(128) not null       \\
+        username    & varchar(30) not null        \\
+        first\_name & varchar(30) not null        \\
+        last\_name  & varchar(30) not null        \\
+        email       & varchar(75) not null        \\
         \bottomrule
     \end{tabular}
 \end{table}
