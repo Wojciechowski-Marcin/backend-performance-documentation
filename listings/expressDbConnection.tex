@@ -1,0 +1,21 @@
+\begin{lstlisting}[language=JavaScript,caption={Express.js database connection},breaklines=true,label={lst:expressDbConnection}]
+    const DBCONFIG = {
+        host: process.env.POSTGRES_HOST,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DB,
+        user: process.env.POSTGRES_USER,
+        port: process.env.POSTGRES_PORT,
+    };
+
+    const initOptions = {
+        extend(obj, dc) {
+            obj.users = new Users(obj, pgp);
+        }
+    };
+    const pgp = pgPromise(initOptions);
+    const db = pgp(DBCONFIG);
+
+    (async () => { await db.users.createTable(); })();
+
+    module.exports = { db, pgp };
+\end{lstlisting}

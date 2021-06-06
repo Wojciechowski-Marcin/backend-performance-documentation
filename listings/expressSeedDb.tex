@@ -1,0 +1,18 @@
+\begin{lstlisting}[language=JavaScript,caption={Populating Express.js DB},breaklines=true,label={lst:expressSeedDb}]
+    const users = [];
+    for (var id = 0; id < USER_AMOUNT; id++) {
+      const first_name = `First${id}`;
+      const last_name = `Last${id}`;
+      const user = {
+        id: `${id + 1}`,
+        first_name,
+        last_name,
+        username: first_name + last_name,
+        email: `${first_name}@${last_name}.com`,
+        password: `Pass${id}!`,
+      };
+      users.push(user);
+    }
+    const query = this.pgp.helpers.insert(users, cs.insert);
+    await this.db.none(query);
+\end{lstlisting}

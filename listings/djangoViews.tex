@@ -1,0 +1,9 @@
+\begin{lstlisting}[language=Python,caption={Controllers for django endpoints},breaklines=true,label={lst:djangoViews}]
+    class UserViewSet(viewsets.ModelViewSet):
+        queryset = MyUser.objects.all()
+        serializer_class = UserSerializer
+    
+    @api_view(['GET'])
+    def status(r):
+        return Response()    
+\end{lstlisting}

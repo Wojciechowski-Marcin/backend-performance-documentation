@@ -8,7 +8,7 @@ For the tests, a database consisting of a single table was created - a model is 
 
 \input{tables/databaseModel.tex}
 
-For every application the operations on the PostgreSQL database may be slightly different, since in Django and ASP.NET they are handled by the Object-Relational Mapping libraries, while Express works on SQL statements.
+For every application the operations on the \acrlong{pg} database may be slightly different, since in Django and ASP.NET they are handled by the \acrlong{orm} libraries, while Express works on SQL statements.
 
 Database creation is based on environment variables, as it makes it easier for connecting the applications to the database later. For the connection, the following variables need to be present:
 \begin{itemize}
@@ -21,11 +21,84 @@ Database creation is based on environment variables, as it makes it easier for c
 
 \subsection{Initial population creation}
 
-For every application the script responsible for seeding the database looks basically the same, but obviously the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script, to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
+For every application the script responsible for seeding the database looks basically the same, but for the different frameworks the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script, to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
 
-\subsection{Operations on users}
+Each framework (or library providing database support) has it's own built in methods for \acrshort{crud} operations, and they may be slightly different from each other. For example, Express.js and ASP.NET Core framework automatically wrap statements in a transaction. ASP.NET in each transaction sets the transaction isolation level and uses prepared statements, which then are executed with required parameters. In listings \ref{lst:aspnetPopulateLog} \ref{lst:expressPopulateLog} and \ref{lst:djangoPopulateLog} there are presented example log queries for initial user population creation.
 
-\section{Applications}
+\input{listings/aspnetPopulateLog.tex}
+\input{listings/expressPopulateLog.tex}
+\input{listings/djangoPopulateLog.tex}
+
+\section{Applications endpoints}\label{sec:endpoints}
+
+For the load tests, applications were prepared with 6 endpoints:
+\begin{itemize}
+    \item GET /status/
+          \begin{itemize}
+              \item Description: required for the script, allows to check if the server has properly started and can properly respond to requests
+              \item Response code: 200
+              \item Response body: empty
+          \end{itemize}
+    \item GET /users/\{id\}/
+          \begin{itemize}
+              \item Description: retrieves user with given id from the database
+              \item Database operation: retrieve
+              \item Parameters:
+                    \begin{itemize}
+                        \item id - path parameter, id of the user to be retrieved
+                    \end{itemize}
+              \item Response code: 200
+              \item Response body: User model
+          \end{itemize}
+    \item GET /users/?limit=\{limit\}\&offset=\{offset\}
+          \begin{itemize}
+              \item Description: retrieves multiple users - allows to check the frameworks serialization speed
+              \item Database operation: retrieve
+              \item Parameters:
+                    \begin{itemize}
+                        \item limit - query parameter, amount of users returned
+                        \item offset - query parameter, amount of rows to skip from the beginning
+                    \end{itemize}
+              \item Response code: 200
+              \item Response body: User model array
+          \end{itemize}
+    \item DELETE /users/\{id\}/
+          \begin{itemize}
+              \item Description: Removes user with given id
+              \item Database operation: delete
+              \item Parameters:
+                    \begin{itemize}
+                        \item id - path parameter, id of the user to be removed
+                    \end{itemize}
+              \item Response code: 204
+              \item Response body: empty
+          \end{itemize}
+    \item POST /users/
+          \begin{itemize}
+              \item Description: Creates user from details provided in body
+              \item Database operation: create
+              \item Request body: User model to be created
+              \item Response code: 201
+              \item Response body: User model
+          \end{itemize}
+    \item PUT /users/\{id\}/
+          \begin{itemize}
+              \item Description: Updates user with given id from details provided in body
+              \item Database operation: update
+              \item Request body: User model to be created
+              \item Parameters:
+                    \begin{itemize}
+                        \item id - path parameter, id of the user to be removed
+                    \end{itemize}
+              \item Response code: 201
+              \item Response body: User model
+          \end{itemize}
+\end{itemize}
+
+% TODO describe User model, User model array, use User model with no password when necessary
+
 \section{Environment}
 
-Before the application starts, the database needs to be running. That is why docker compose configuration contains a healthcheck for \acrshort{pg}
+As mentioned in the previous chapters, a script that gathers all the measurements was prepared, which follows the schema presented in algorithm \ref{alg:testProgress}.
+
+% TODO what to write here

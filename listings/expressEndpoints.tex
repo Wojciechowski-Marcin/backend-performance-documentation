@@ -1,0 +1,30 @@
+\begin{lstlisting}[language=JavaScript,caption={Express.js routing and endpoint logic},breaklines=true,label={lst:expressEndpoints}]
+    app.get("/status", (req, res) => res.sendStatus(200));
+    
+    app.get("/users/:id", async (req, res) => {
+        const data = await db.users.retrieve(req.params.id);
+        return data ? res.json(data) : res.sendStatus(400);
+    });
+
+    app.get("/users", async (req, res) => {
+        const limit = req.query.limit;
+        const offset = req.query.offset;
+        const data = await db.users.get(limit, offset);
+        return data ? res.json(data) : res.sendStatus(400);
+    });
+
+    app.post("/users", async (req, res) => {
+        const data = await db.users.insert(req.body);
+        return data ? res.status(201).json(data) : res.sendStatus(400);
+    });
+
+    app.delete("/users/:id", async (req, res) => {
+        await db.users.delete(req.params.id);
+        return res.sendStatus(204);
+    });
+
+    app.put("/users/:id", async (req, res) => {
+        const data = await db.users.update(req.body, req.params.id);
+        return data ? res.json(data) : res.sendStatus(400);
+    });
+\end{lstlisting}

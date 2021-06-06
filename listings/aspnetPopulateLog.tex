@@ -1,0 +1,9 @@
+\begin{lstlisting}[caption={Log of ASP.NET initial user population creation},breaklines=true,label={lst:aspnetPopulateLog}]
+    LOG:  statement: BEGIN
+    LOG:  statement: SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+    LOG: execute: INSERT INTO users (id, email, first_name, last_name, password, username) VALUES ($1, $2, $3, $4, $5, $6)
+    DETAIL: parameters: $1 = '1', $2 = 'First0@Last0.com', $3 = 'First0', $4 = 'Last0', $5 = 'Pass0!', $6 = 'First0Last0'
+    LOG: execute: INSERT INTO users (id, email, first_name, last_name, password, username) VALUES ($1, $2, $3, $4, $5, $6)
+    DETAIL: parameters: $1 = '2', $2 = 'First1@Last1.com', $3 = 'First1', $4 = 'Last1', $5 = 'Pass1!', $6 = 'First1Last1'
+    LOG:  statement: COMMIT
+\end{lstlisting}

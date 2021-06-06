@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=Python,caption={Fragment of Django route configuration file - app/urls.py},breaklines=true,label={lst:djangoUrlsApp}]
+    from .views import UserViewSet, status
+    
+    router = routers.DefaultRouter()
+    router.register(r'users', UserViewSet)
+    
+    urlpatterns = [
+        path('', include(router.urls)),
+        path('status', status),
+    ]
+\end{lstlisting}

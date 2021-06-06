@@ -1,0 +1,6 @@
+\begin{lstlisting}[language=Python,caption={Django User serialization class},breaklines=true,label={lst:djangoSerialization}]
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = MyUser
+            fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password']
+\end{lstlisting}

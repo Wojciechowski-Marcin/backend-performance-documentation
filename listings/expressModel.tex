@@ -1,0 +1,42 @@
+\begin{lstlisting}[language=JavaScript,caption={Express.js user model},breaklines=true,label={lst:expressModel}]
+class UsersModel {
+  constructor(db, pgp) {
+    this.db = db;
+    this.pgp = pgp;
+
+    createColumnsets(pgp);
+  }
+
+  async insert(user) {
+    return this.db.one(sql.insert, user);
+  }
+
+  async update(fields, id) {
+    const updateFields = `(${Object.keys(fields)}) = ROW(${
+      Object.values(fields).map((value) => `'${value}'`)})`;
+
+    return this.db.one(
+      "UPDATE users SET $1^ WHERE id = $2 RETURNING *",
+      [updateFields, +id]
+    );
+  }
+
+  async delete(id) {
+    return this.db.any("DELETE FROM users WHERE id = $1", [+id]);
+  }
+
+  async retrieve(id) {
+    return this.db.oneOrNone(
+      "SELECT * FROM users WHERE id = $1",
+      [+id]
+    );
+  }
+
+  async get(limit, offset) {
+    return this.db.multi(
+      "SELECT * FROM users LIMIT $1 OFFSET $2",
+      [+limit, +offset]
+    );
+  }
+}
+\end{lstlisting}

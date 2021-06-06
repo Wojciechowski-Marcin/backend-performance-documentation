@@ -1,0 +1,5 @@
+\begin{lstlisting}[caption={Log of Express.js initial user population creation},breaklines=true,label={lst:expressPopulateLog}]
+    LOG:  statement: BEGIN
+    LOG:  statement: INSERT INTO "app_myuser" ("id", "password", "username", "first_name", "last_name", "email") VALUES (1, 'Pass0!', 'First0Last0', 'First0', 'Last0', 'First0@Last0.com'), (2, 'Pass1!', 'First1Last1', 'First1', 'Last1', 'First1@Last1.com') RETURNING "app_myuser"."id"
+    LOG:  statement: COMMIT
+\end{lstlisting}
