@@ -1,0 +1,17 @@
+\begin{lstlisting}[language=csh,caption={Populating ASP.NET Core \acrshort{db}},breaklines=true,label={lst:aspnetSeedDb}]
+    var users = new List<User>();
+    for (var id = 0; id < user_amount; id++) {
+        var first_name = $"First{id}";
+        var last_name = $"Last{id}";
+        var user = new User();
+        user.Id = int.Parse($"{id + 1}");
+        user.Username = first_name + last_name;
+        user.FirstName = first_name;
+        user.LastName = last_name;
+        user.Email = $"{first_name}@{last_name}.com";
+        user.Password = $"Pass{id}!";
+        users.Add(user);
+    }
+    this.AddRange(users);
+    this.SaveChanges();
+\end{lstlisting}

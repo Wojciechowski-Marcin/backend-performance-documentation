@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=csh,caption={ASP.NET Core database connection},breaklines=true,label={lst:aspnetDbConnection}]
+    var db = Environment.GetEnvironmentVariable("POSTGRES_DB");
+    var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
+    var pass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+    var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+    var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+    var connectionString = $"host={host};port={port};database={db};username={user};password={pass};";
+    services.AddDbContext<ApiDbContext>(options =>
+        options.UseNpgsql(connectionString)
+    );
+\end{lstlisting}

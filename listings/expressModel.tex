@@ -12,13 +12,20 @@ class UsersModel {
   }
 
   async update(fields, id) {
-    const updateFields = `(${Object.keys(fields)}) = ROW(${
-      Object.values(fields).map((value) => `'${value}'`)})`;
+    const user = await this.retrieve(id);
+    if (user) {
+      const updateFields = `(${Object.keys(fields)}) = ROW(${Object.values(
+        fields
+      ).map((value) => `'${value}'`)
+        })`;
 
-    return this.db.one(
-      "UPDATE users SET $1^ WHERE id = $2 RETURNING *",
-      [updateFields, +id]
-    );
+      return this.db.one("UPDATE users SET $1^ WHERE id = $2 RETURNING *", [
+        updateFields,
+        +id,
+      ]);
+    } else {
+      return null
+    }
   }
 
   async delete(id) {

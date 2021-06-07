@@ -67,7 +67,9 @@ insert into "public"."users"("id","password","username","first_name","last_name"
 INSERT INTO users ("id", "password", "username", "first_name", "last_name", "email") VALUES(502, 'Pass501!', 'First501Last501', 'First501', 'Last501', 'First501@Last501.com') RETURNING *
 INSERT INTO users ("id", "password", "username", "first_name", "last_name", "email") VALUES(503, 'Pass502!', 'First502Last502', 'First502', 'Last502', 'First502@Last502.com') RETURNING *
 
+SELECT * FROM users WHERE id = 502
 UPDATE users SET (username) = ROW('Changed501') WHERE id = 502 RETURNING *
+SELECT * FROM users WHERE id = 503
 UPDATE users SET (username) = ROW('Changed502') WHERE id = 503 RETURNING *
 
 SELECT * FROM users WHERE id = 501

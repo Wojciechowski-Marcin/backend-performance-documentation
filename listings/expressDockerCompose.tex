@@ -1,0 +1,14 @@
+\begin{lstlisting}[language=docker-compose-2,caption={Express.js Docker Compose configuration},breaklines=true,label={lst:expressDockerCompose}]
+    express:
+        profiles: ["express"]
+        build: express
+        env_file:
+            - env/postgres.env
+        environment:
+            - NODE_ENV=production
+            - USER_AMOUNT=${USER_AMOUNT}
+        depends_on:
+            postgres:
+                condition: service_healthy
+        mem_reservation: 4gb
+\end{lstlisting}

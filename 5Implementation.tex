@@ -6,13 +6,30 @@
 % DOCKER
 %
 \section{Docker and Docker Compose}
+\subsection{\acrlong{pg}}
+\acrlong{pg} is built straight from the image without the need of Dockerfile, thus only the Docker Compose configuration is present. It places environment variables described in section \ref{sec:pgDbVars} from the file, creates a named volume containing the database files, reserves memory and creates a healthcheck, which allows to determine whether the container is ready to be connected to. Configuration for this service is presented in listing \ref{lst:postgresDockerCompose}
+\input{listings/postgresDockerCompose.tex}
 
-% TODO it was written for django, change accordingly to the current section
+\subsection{Applications}
+It made utmost sense to place this section standalone and not within each application, since the configurations for all of them are very alike.
+Dockerfiles are configured to install all necessary packages, place the code in suitable folders, specify a non-root user for the container to run as and set the entrypoint to a script that starts the application.
+The main differences between the Dockerfiles are the chosen images:
+\begin{itemize}
+    \item Django Dockerfile was inspired by Anuj Sharma, who created one for his series of Django development guide articles - image used is python:3.9.1-slim, % TODO ref https://dev.to/anujdev/django-development-using-docker-as-host-part-1-dockerfile-3bnc
+    \item For Express.js, a latest slim image of \acrshort{lts} node version was chosen - node:14.17.0-slim,
+    \item ASP.NET Core has a Dockerfile suggested by the documentation, so it was used in the application - images dotnet:2.1-sdk and dotnet:2.1-aspnetcore-runtime (multistage build). % TODO ref https://docs.microsoft.com/pl-pl/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-2.1
+\end{itemize}
+Dockerfiles were also checked by Hadolint, which is a linter that helps to build best practice Docker images. % TODO ref https://github.com/hadolint/hadolint
+It verifies if the Dockerfile follows the rules presented in official docker documentation. % TODO ref https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+Example Dockerfile is presented in listing \ref{lst:expressDockerfile}.
+Docker Compose configuration points to the build folder, imports the environment variables for connection with \acrshort{pg} and variable with amount of users to create, ensures that the application starts after the database has started (makes the app wait for \acrlong{pg} healthcheck) and reserves memory for the application. To see an example of Docker Compose configuration check listing \ref{lst:expressDockerCompose}.
+\input{listings/expressDockerfile.tex}
+\input{listings/expressDockerCompose.tex}
 
-The Dockerfile that I prepared was inspired by Anuj Sharma, who created one for his series of Django development guide articles.
-% TODO ref https://dev.to/anujdev/django-development-using-docker-as-host-part-1-dockerfile-3bnc
-It uses the python:3.9.1-slim image, installs all necessary packages, places the code in suitable folders, changes the user to a non-root user and sets the entrypoint to a script that starts the application.
-Docker Compose configuration contains the build folder, imports the environment variables for connection with \acrshort{pg} and variable with amount of users to create, ensures that the application starts after the database has started (makes the app wait for \acrlong{pg} healthcheck) and reserves memory for the application.
+\subsection{K6 and related tools}
+Developers of k6 prepared instructions for usage with Docker % TODO ref https://k6.io/docs/getting-started/running-k6/#running-local-tests
+as well as an example Docker Compose configuration, including InfluxDB and Grafana integration. % TODO ref https://github.com/k6io/k6/blob/master/docker-compose.yml
+In the interest of the performance tests the latter was introduced, with small adjustments to fit the needs of test environment. For example, Grafana configuration was not needed in our case, since the results are later exported to a file for drawing custom graphs.
 
 %
 % DJANGO
@@ -64,6 +81,14 @@ Unlike in Django, routes and endpoints are not separated in two files. It is ver
 % ASP.NET
 %
 \section{ASP.NET}
+\subsection{Model}
+% TODO say it handles serialization
+\input{listings/aspnetModel.tex}
+\subsection{Database connection and initialization}
+\input{listings/aspnetDbConnection.tex}
+\input{listings/aspnetSeedDb.tex}
+\subsection{Routing and Endpoints}
+\input{listings/aspnetEndpoints.tex}
 
 
 %

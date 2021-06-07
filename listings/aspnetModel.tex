@@ -1,0 +1,28 @@
+\begin{lstlisting}[language=csh,caption={ASP.NET Core user model},breaklines=true,label={lst:aspnetModel}]
+    public class User {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [Required]
+        [Column(TypeName = "varchar(128)")]
+        public string Password { get; set; }
+        
+        [Required]
+        [Column(TypeName = "varchar(30)")]
+        public string Username { get; set; }
+
+        [Required]
+        [JsonProperty("first_name")]
+        [Column(TypeName = "varchar(30)")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [JsonProperty("last_name")]
+        [Column(TypeName = "varchar(30)")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Column(TypeName = "varchar(75)")]
+        public string Email { get; set; }
+    }
+\end{lstlisting}

@@ -1,0 +1,14 @@
+\begin{lstlisting}[language=docker-compose-2,caption={\acrlong{pg} Docker Compose configuration},breaklines=true,label={lst:postgresDockerCompose}]
+    postgres:
+      image: postgres:13.1-alpine
+      env_file:
+        - env/postgres.env
+      volumes:
+        - pgdata:/var/lib/postgresql/data/
+      mem_reservation: 4gb
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+  \end{lstlisting}
