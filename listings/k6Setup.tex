@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 setup functions},breaklines=true,label={lst:k6Setup}]
+const waitForServer = () => {
+  let r;
+  while (!r || r.status !== 200) {
+    try {
+      r = http.get(`${baseUrl}/status`);
+    } catch (e) { }
+    sleep(3);
+  }
+};
+\end{lstlisting}

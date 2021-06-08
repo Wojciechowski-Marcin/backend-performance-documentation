@@ -84,11 +84,14 @@ Unlike in Django, routes and endpoints are not separated in two files. It is ver
 \subsection{Model}
 Model in ASP.NET Core is a class that serves a similar purpose to Django model (shown in subsection \ref{sub:djangoModel}). It defines all the fields that need to be placed in the database model, including the names, types and constraints, using 'Required' and 'Column' decorators. In addition to that, using 'JsonProperty' decorator we can describe a field name that is later used in serialization and deserialization, so we do not have to specify a serializer manually later. Model is presented in listing \ref{lst:aspnetModel}.
 \input{listings/aspnetModel.tex}
+
 \subsection{Database connection and initialization}
-Connection to the database looked more similar in Express.js - we need to get all environment variables, create a connection string string using them and pass them to the \acrlong{pg} provider, as shown in listing \ref{lst:aspnetDbConnection}.
+Connection to the database looked more similar in Express.js - we need to get all environment variables, create a connection string string using them and pass them to the \acrlong{pg} provider, as shown in listing \ref{lst:aspnetDbConnection}. Initial population generation is shown in \ref{lst:aspnetSeedDb}.
 \input{listings/aspnetDbConnection.tex}
 \input{listings/aspnetSeedDb.tex}
+
 \subsection{Routing and Endpoints}
+The code for controllers is quite lengthy, but that is because routing and endpoint definition is a part of database context class - using 'Route', 'HttpGet', 'HttpPost', 'HttpPut' and 'HttpDelete' decorators we are able to define routes for given functions. Request parameters are placed directly into the function arguments, using 'FromQuery', 'FromBody' clauses or by putting the argument in the decorator (for example 'HttpGet("{id}")'). All controllers can be seen in listing \ref{lst:aspnetEndpoints}.
 \input{listings/aspnetEndpoints.tex}
 
 
@@ -96,3 +99,45 @@ Connection to the database looked more similar in Express.js - we need to get al
 % PERFORMANCE
 %
 \section{Performance tests}
+Tests implementation is divided into 6 files:
+\begin{itemize}
+    \item config.js,
+    \item delete.test.js,
+    \item get.test.js,
+    \item getMany.test.js,
+    \item post.test.js,
+    \item put.test.js.
+\end{itemize}
+Configuration file config.js is a module that contains common code for all tests, utility functions such as waiting for container, preparing scenarios, parsing environment variables, creating users (in the same fashion as ones existing in the database) or exporting results to a file.
+
+\subsection{Environment variables}
+From the main script, the following test variables are passed:
+\begin{itemize}
+    \item TEST\_TIME - defines the length of a performance test,
+    \item VU\_AMOUNT - shows with how many concurrent \acrshort{vu}s the test will be run,
+    \item USER\_AMOUNT - describes amount of users existing in the database,
+    \item SCENARIO - is the current scenario (according to what was said in subsection \ref{sub:scenarios}, for 1 \acrshort{vu} the scenario is constant-vus and for the other cases it is ramping-vus),
+    \item FRAMEWORK - shows which framework is currently started,
+    \item RESULTS\_PATH - defines a path to a file for exporting final results.
+\end{itemize}
+
+\subsection{Scenarios}
+K6 have a few executors defined. For this research only two of them will be used:
+\begin{itemize}
+    \item Constant \acrshort{vu}s, where a fixed number of \acrlong{vu}s try to execute as many iterations as possible within a specified period of time,
+    \item and Ramping \acrshort{vu}s, which is very alike to the Constant \acrshort{vu}s executor, but works on a variable number of \acrlong{vu}s \cite{k6Executors}.
+\end{itemize}
+To further demonstrate the meaning of code in listing \ref{lst:k6Scenarios}, it needs to be mentioned that graceful stop and graceful ramp down variables allow to finish currently running requests after the time limit has passed and stages in 'ramping-vus' case statement describe the \acrshort{vu} chart from figure \ref{fig:vusPerSecond}.
+\input{listings/k6Scenarios.tex}
+
+\subsection{Setup}
+Setup function is the first user-defined thing that runs when the k6 application is started. It needs to be run from the test file, but the code that is common for all tests is shown in \ref{lst:k6Setup}. This function sends requests every 3 seconds, trying to get a response from applications' status endpoint.
+\input{listings/k6Setup.tex}
+
+\subsection{Get test}
+Get test is the simplest of the group, so it is going to be used to explain the whole k6 test structure.
+\input{listings/k6Get.tex}
+%
+% MAIN SCRIPT
+%
+\section{Main script}

@@ -1,0 +1,29 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 Get test},breaklines=true,label={lst:k6Get}]
+
+export const options = config.baseOptions;
+
+function request(id) {
+  const r = http.get(config.userUrl + id + "/");
+  return r;
+}
+
+export function setup() {
+  config.waitForServer();
+  config.warmup((i) =>
+    request(config.getElementId(i % (config.USER_AMOUNT - 1), __VU))
+  );
+}
+
+export function handleSummary(data) {
+  return config.csvHandler(data);
+}
+
+export default function () {
+  group("get", () => {
+    const id = config.getElementId(__ITER, __VU);
+    const r = request(id);
+    config.checkStatus(r, 200);
+  });
+}
+
+\end{lstlisting}

@@ -1,0 +1,31 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 scenarios definition},breaklines=true,label={lst:k6Scenarios}]
+const getScenario = () => {
+  const scenario = __ENV.SCENARIO
+  switch (scenario) {
+    case "constant-vus": {
+      return {
+        executor: "constant-vus",
+        vus: VU_AMOUNT,
+        duration: TEST_TIME + "s",
+        gracefulStop: '1m',
+      };
+    }
+    case "ramping-vus": {
+      const target = VU_AMOUNT;
+      return {
+        executor: 'ramping-vus',
+        startVUs: 0,
+        stages: [
+          { duration: TEST_TIME / 3 + "s", target },
+          { duration: TEST_TIME / 3 + "s", target },
+          { duration: TEST_TIME / 3 + "s", target: 0 },
+        ],
+        gracefulRampDown: "1m"
+      }
+    }
+    default: {
+      return;
+    }
+  }
+}
+\end{lstlisting}
