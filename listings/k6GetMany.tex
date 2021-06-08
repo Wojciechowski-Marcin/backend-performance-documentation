@@ -1,0 +1,18 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 GetMany test},breaklines=true,label={lst:k6GetMany}]
+function request(limit, offset) {
+  const r = http.get(
+    config.userUrl + `?limit=${limit}&offset=${offset}`);
+  return r;
+}
+
+const limit = 100;
+
+export default function () {
+  group("getMany", () => {
+    const offset = parseInt(
+      (limit * __ITER) % (config.USER_AMOUNT - 1), 10);
+    const r = request(limit, offset);
+    config.checkStatus(r, 200);
+  });
+}
+\end{lstlisting}

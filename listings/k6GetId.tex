@@ -1,0 +1,4 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 Get user ID},breaklines=true,label={lst:k6GetId}]
+const USERS_PER_VU = parseInt(USER_AMOUNT / (VU_AMOUNT + 1), 10)
+const getElementId = (iter, vu) => USERS_PER_VU * vu + iter + 1
+\end{lstlisting}

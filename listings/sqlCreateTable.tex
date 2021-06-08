@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=SQL,caption={Table creation \acrshort{sql} command},breaklines=true,label={lst:sqlCreateTable}]
+CREATE TABLE users (
+    id serial NOT NULL,
+    password varchar(128) NOT NULL,
+    username varchar(30) NOT NULL,
+    first_name varchar(30) NOT NULL,
+    last_name varchar(30) NOT NULL,
+    email varchar(75) NOT NULL,
+    CONSTRAINT "PK_users" PRIMARY KEY (id)
+)
+\end{lstlisting}

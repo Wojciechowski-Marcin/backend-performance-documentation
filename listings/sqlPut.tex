@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=SQL,caption={\acrshort{sql} commands for updating objects},breaklines=true,label={lst:sqlPut}]
+ASP.NET Core:
+UPDATE users SET username = $1 WHERE id = $2
+parameters: $1 = 'Changed501', $2 = '502'
+
+Express.js:
+UPDATE users SET (id,password,username,first_name,last_name,email) = ROW('502','Pass501!','Changed501','First501','Last501','First501@Last501.com') WHERE id = 502 RETURNING *
+
+Django:
+UPDATE "app_myuser" SET "password" = 'Pass501!', "username" = 'Changed501', "first_name" = 'First501', "last_name" = 'Last501', "email" = 'First501@Last501.com' WHERE "app_myuser"."id" = 502
+\end{lstlisting}

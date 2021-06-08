@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=SQL,caption={\acrshort{sql} commands for creating objects},breaklines=true,label={lst:sqlPost}]
+ASP.NET Core:
+INSERT INTO users (id, email, first_name, last_name, password, username) VALUES ($1, $2, $3, $4, $5, $6)
+parameters: $1 = '502', $2 = 'First501@Last501.com', $3 = 'First501', $4 = 'Last501', $5 = 'Pass501!', $6 = 'First501Last501'
+
+Express.js:
+INSERT INTO users ("id", "password", "username", "first_name", "last_name", "email") VALUES(502, 'Pass501!', 'First501Last501', 'First501', 'Last501', 'First501@Last501.com') RETURNING *
+
+Django:
+INSERT INTO "app_myuser" ("password", "username", "first_name", "last_name", "email") VALUES ('Pass501!', 'First501Last501', 'First501', 'Last501', 'First501@Last501.com') RETURNING "app_myuser"."id"
+\end{lstlisting}

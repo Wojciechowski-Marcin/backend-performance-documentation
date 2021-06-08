@@ -9,9 +9,6 @@ function request(id) {
 
 export function setup() {
   config.waitForServer();
-  config.warmup((i) =>
-    request(config.getElementId(i % (config.USER_AMOUNT - 1), __VU))
-  );
 }
 
 export function handleSummary(data) {

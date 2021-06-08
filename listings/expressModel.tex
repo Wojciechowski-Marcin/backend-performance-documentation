@@ -29,7 +29,13 @@ class UsersModel {
   }
 
   async delete(id) {
-    return this.db.any("DELETE FROM users WHERE id = $1", [+id]);
+    const user = await this.retrieve(id);
+    if (user) {
+      return this.db.any("DELETE FROM users WHERE id = $1", [+id]);
+    }
+    else {
+      return null
+    }
   }
 
   async retrieve(id) {

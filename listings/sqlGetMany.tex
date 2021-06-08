@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=SQL,caption={\acrshort{sql} commands for retrieving multiple objects},breaklines=true,label={lst:sqlGetMany}]
+ASP.NET Core:
+SELECT u.id, u.email, u.first_name, u.last_name, u.password, u.username FROM users AS u ORDER BY u.id LIMIT $1 OFFSET $2
+parameters: $1 = '100', $2 = '0'
+
+Express.js:
+SELECT * FROM users LIMIT 100 OFFSET 0
+
+Django:
+SELECT "app_myuser"."id", "app_myuser"."password", "app_myuser"."username", "app_myuser"."first_name", "app_myuser"."last_name", "app_myuser"."email" FROM "app_myuser" LIMIT 100
+\end{lstlisting}

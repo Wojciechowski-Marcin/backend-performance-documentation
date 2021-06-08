@@ -1,0 +1,11 @@
+\begin{lstlisting}[language=SQL,caption={\acrshort{sql} commands for retrieving objects},breaklines=true,label={lst:sqlGet}]
+ASP.NET Core:
+SELECT b.id, b.email, b.first_name, b.last_name, b.password, b.username FROM users AS b WHERE b.id = $1 LIMIT 2
+parameters: $1 = '501'
+
+Express.js:
+SELECT * FROM users WHERE id = 501
+
+Django:
+SELECT "app_myuser"."id", "app_myuser"."password", "app_myuser"."username", "app_myuser"."first_name", "app_myuser"."last_name", "app_myuser"."email" FROM "app_myuser" WHERE "app_myuser"."id" = 501 LIMIT 21
+\end{lstlisting}

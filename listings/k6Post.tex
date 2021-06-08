@@ -1,0 +1,21 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 Post test},breaklines=true,label={lst:k6Post}]
+function request(newUser) {
+  const payload = JSON.stringify(newUser);
+  var params = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const r = http.post(config.userUrl, payload, params);
+  return r;
+}
+
+export default function () {
+  group("post", () => {
+    const id = config.getElementId(__ITER, __VU);
+    const newUser = config.getUser(id);
+    const r = request(newUser);
+    config.checkStatus(r, 201)
+  });
+}
+\end{lstlisting}

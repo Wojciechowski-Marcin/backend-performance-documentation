@@ -94,6 +94,23 @@ Connection to the database looked more similar in Express.js - we need to get al
 The code for controllers is quite lengthy, but that is because routing and endpoint definition is a part of database context class - using 'Route', 'HttpGet', 'HttpPost', 'HttpPut' and 'HttpDelete' decorators we are able to define routes for given functions. Request parameters are placed directly into the function arguments, using 'FromQuery', 'FromBody' clauses or by putting the argument in the decorator (for example 'HttpGet("{id}")'). All controllers can be seen in listing \ref{lst:aspnetEndpoints}.
 \input{listings/aspnetEndpoints.tex}
 
+%
+% SQL
+%
+\section{\acrshort{sql} queries comparison}
+\acrshort{sql} queries are being generated differently by ASP.NET Core and Django. In case of Express.js, it is developers role to create them, so they were prepared to try to match the queries from the other frameworks while still being relatively simple. Logs were gathered from \acrlong{pg} in a separate test with logging turned on (for performance tests logging was completely turned off).
+Tables are created in the same fashion, except the primary key constraint in Django and Express.js is added right next to the definition of id field, and not separately as shown for ASP.NET in listing \ref{lst:sqlCreateTable}.
+\input{listings/sqlCreateTable.tex}
+ASP.NET Core uses parameterized queries (in \acrlong{pg} PREPARE and EXECUTE clauses), so log of the query is followed by parameters that the query was called with.
+
+In get queries, presented in listing \ref{lst:sqlGet}, the interesting part to note is the LIMIT clause - it was added automatically by both ASP.NET and Django to a value bigger than 1 - this safety limit for GET requests was introduced in case provided filters in WHERE clause matched more than exactly one object (which in this case is not intended), to be able to provide a meaningful error message.
+
+Updates and deletes (listings \ref{lst:sqlPut} and \ref{lst:sqlDelete} respectively) are preceded by select statements, that are exactly the same as in listing \ref{lst:sqlGet}.
+\input{listings/sqlGet.tex}
+\input{listings/sqlGetMany.tex}
+\input{listings/sqlPut.tex}
+\input{listings/sqlDelete.tex}
+\input{listings/sqlPost.tex}
 
 %
 % PERFORMANCE
@@ -134,10 +151,35 @@ To further demonstrate the meaning of code in listing \ref{lst:k6Scenarios}, it 
 Setup function is the first user-defined thing that runs when the k6 application is started. It needs to be run from the test file, but the code that is common for all tests is shown in \ref{lst:k6Setup}. This function sends requests every 3 seconds, trying to get a response from applications' status endpoint.
 \input{listings/k6Setup.tex}
 
-\subsection{Get test}
-Get test is the simplest of the group, so it is going to be used to explain the whole k6 test structure.
+\subsection{Get and delete tests}
+Listing \ref{lst:k6Get} shows get test, which is the simplest of the group, so it is going to be used to explain the whole k6 test structure.
+Delete test is almost the same - it differs in the request method (it sends DELETE instead of GET) and the response status checked (204 instead of 200).
+Variable 'options' is used by k6 to determine scenarios for the tests and timeout for the setup function.
+Setup function was mentioned in the previous subsection, it waits for the application to be started.
+Handle summary function is executed at the end of the test, it is configured to export the results to the \acrshort{csv} file.
+And finally default function exists to be run by the \acrshort{vu}s. Choosing the user for a request is based on two variables:
+\begin{itemize}
+    \item \_\_VU - identification number of the \acrshort{vu} that executes this function,
+    \item and \_\_ITER - which is the number of iteration that the current \acrshort{vu} is running.
+\end{itemize}
+Function that chooses the id for the user is presented in listing \ref{lst:k6GetId}.
+After the request is finished a status is checked for verification if the responses were correct.
+Each test file contains a request function, it helped during development phase of this project, as this is the main part that is different between the tests.
+Get test sends a simple GET request to the endpoint based on chosen user id.
+Code common for all tests has been cut from listings \ref{lst:k6GetMany}, \ref{lst:k6Put} and \ref{lst:k6Post}.
 \input{listings/k6Get.tex}
-%
-% MAIN SCRIPT
-%
-\section{Main script}
+\input{listings/k6GetId.tex}
+
+\subsection{Get many test}
+Retrieving multiple users from the database operates on two variables - limit and offset. Limit was set to 100 in these tests - as presented in the chapter \ref{cha:results}, this already caused high stress for the applications compared to the other tests and allowed to create meaningful results. Offset variable changes with iteration - with each iteration next 100 rows are queried from the database. The exact methods are presented in listing \ref{lst:k6GetMany}.
+\input{listings/k6GetMany.tex}
+
+\section{Put test}
+Put test introduce two new functions called 'getUser' and 'changeUser'. The first one, presented in listing \ref{lst:k6GetUser}, creates a user unique for given iteration of \acrshort{vu} id, and the second one, shown in listing \ref{lst:k6ChangeUser}, introduces a small change to the user - changes its username for update. What is more, a 'Content-Type' header had to be set to 'application/json', as we are sending a \acrshort{json} content in the request.
+\input{listings/k6Put.tex}
+\input{listings/k6GetUser.tex}
+\input{listings/k6ChangeUser.tex}
+
+\section{Post test}
+This test uses mentioned in the previous section function 'getUser' to create a new user in the database. Users will not collide with each other since post test starts its execution on an empty database.
+\input{listings/k6Post.tex}

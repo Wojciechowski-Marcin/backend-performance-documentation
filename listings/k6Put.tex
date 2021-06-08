@@ -1,0 +1,28 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 Put test},breaklines=true,label={lst:k6Put}]
+function request(changedUser) {
+  const payload = JSON.stringify(changedUser);
+
+  var params = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const r = http.put(
+    config.userUrl + changedUser.id + "/",
+    payload, params
+  );
+  return r;
+}
+
+export default function () {
+  group("put", () => {
+    const id = config.getElementId(__ITER, __VU);
+    const changedUser = config.changeUser(
+      config.getUser(id), id
+    );
+    const r = request(changedUser);
+    config.checkStatus(r, 200);
+  });
+}
+
+\end{lstlisting}

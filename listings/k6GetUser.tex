@@ -1,0 +1,14 @@
+\begin{lstlisting}[language=JavaScript,caption={K6 Get user function},breaklines=true,label={lst:k6GetUser}]
+const getUser = (id) => {
+  const first_name = `First${id}`;
+  const last_name = `Last${id}`;
+  return {
+    id: id + 1,
+    password: `Pass${id}!`,
+    username: first_name + last_name,
+    first_name: first_name,
+    last_name: last_name,
+    email: `${first_name}@${last_name}.com`,
+  };
+};
+\end{lstlisting}
