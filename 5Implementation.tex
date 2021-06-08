@@ -15,27 +15,27 @@ It made utmost sense to place this section standalone and not within each applic
 Dockerfiles are configured to install all necessary packages, place the code in suitable folders, specify a non-root user for the container to run as and set the entrypoint to a script that starts the application.
 The main differences between the Dockerfiles are the chosen images:
 \begin{itemize}
-    \item Django Dockerfile was inspired by Anuj Sharma, who created one for his series of Django development guide articles - image used is python:3.9.1-slim, % TODO ref https://dev.to/anujdev/django-development-using-docker-as-host-part-1-dockerfile-3bnc
+    \item Django Dockerfile was inspired by Anuj Sharma, who created one for his series of Django development guide articles \cite{djangoDockerfile} - image used is python:3.9.1-slim,
     \item For Express.js, a latest slim image of \acrshort{lts} node version was chosen - node:14.17.0-slim,
-    \item ASP.NET Core has a Dockerfile suggested by the documentation, so it was used in the application - images dotnet:2.1-sdk and dotnet:2.1-aspnetcore-runtime (multistage build). % TODO ref https://docs.microsoft.com/pl-pl/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-2.1
+    \item ASP.NET Core has a Dockerfile suggested by the documentation, so it was used in the application - images dotnet:2.1-sdk and dotnet:2.1-aspnetcore-runtime (multistage build) \cite{aspnetDockerfile}.
 \end{itemize}
-Dockerfiles were also checked by Hadolint, which is a linter that helps to build best practice Docker images. % TODO ref https://github.com/hadolint/hadolint
-It verifies if the Dockerfile follows the rules presented in official docker documentation. % TODO ref https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+Dockerfiles were also checked by Hadolint, which is a linter that helps to build best practice Docker images \cite{hadolintGit}.
+It verifies if the Dockerfile follows the rules presented in official docker documentation \cite{dockerBestPractices}.
 Example Dockerfile is presented in listing \ref{lst:expressDockerfile}.
 Docker Compose configuration points to the build folder, imports the environment variables for connection with \acrshort{pg} and variable with amount of users to create, ensures that the application starts after the database has started (makes the app wait for \acrlong{pg} healthcheck) and reserves memory for the application. To see an example of Docker Compose configuration check listing \ref{lst:expressDockerCompose}.
 \input{listings/expressDockerfile.tex}
 \input{listings/expressDockerCompose.tex}
 
 \subsection{K6 and related tools}
-Developers of k6 prepared instructions for usage with Docker % TODO ref https://k6.io/docs/getting-started/running-k6/#running-local-tests
-as well as an example Docker Compose configuration, including InfluxDB and Grafana integration. % TODO ref https://github.com/k6io/k6/blob/master/docker-compose.yml
+Developers of k6 prepared instructions for usage with Docker \cite{k6RunningLocalTests}.
+as well as an example Docker Compose configuration, including InfluxDB and Grafana integration \cite{k6DockerCompose}.
 In the interest of the performance tests the latter was introduced, with small adjustments to fit the needs of test environment. For example, Grafana configuration was not needed in our case, since the results are later exported to a file for drawing custom graphs.
 
 %
 % DJANGO
 %
 \section{Django}
-\subsection{Model}
+\subsection{Model}\label{sub:djangoModel}
 Django offers a built in User model, however it was decided not to use it in this case. The reason for that is that the built in model handles extra operations for the User, like creating groups, permissions, authentication and a few additional fields. Instead of using it, the implementation of model presented in listing \ref{lst:djangoModel} was created. It does not contain the primary key definition, as django.db.models.Model class handles it automatically.
 \input{listings/djangoModel.tex}
 
@@ -82,9 +82,10 @@ Unlike in Django, routes and endpoints are not separated in two files. It is ver
 %
 \section{ASP.NET}
 \subsection{Model}
-% TODO say it handles serialization
+Model in ASP.NET Core is a class that serves a similar purpose to Django model (shown in subsection \ref{sub:djangoModel}). It defines all the fields that need to be placed in the database model, including the names, types and constraints, using 'Required' and 'Column' decorators. In addition to that, using 'JsonProperty' decorator we can describe a field name that is later used in serialization and deserialization, so we do not have to specify a serializer manually later. Model is presented in listing \ref{lst:aspnetModel}.
 \input{listings/aspnetModel.tex}
 \subsection{Database connection and initialization}
+Connection to the database looked more similar in Express.js - we need to get all environment variables, create a connection string string using them and pass them to the \acrlong{pg} provider, as shown in listing \ref{lst:aspnetDbConnection}.
 \input{listings/aspnetDbConnection.tex}
 \input{listings/aspnetSeedDb.tex}
 \subsection{Routing and Endpoints}

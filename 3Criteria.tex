@@ -15,8 +15,7 @@ The task for each application is to complete simple \acrshort{crud} operations a
     \item deleting a single object (delete)
 \end{itemize}
 
-They were tested with a few different application loads, which are represented by a number of \acrlong{vu}s (\acrshort{vu}s) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops.
-% TODO ref to k6 repo
+They were tested with a few different application loads, which are represented by a number of \acrlong{vu}s (\acrshort{vu}s) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops \cite{k6Git}.
 The scenarios chosen for tests are:
 \begin{itemize}
     \item 1 \acrshort{vu}
@@ -31,7 +30,7 @@ For a single virtual user case the number of concurrences does not change throug
 
 Longer test times did not bring any satisfactory results and only caused CPU throttling problems, thus they were shortened to the period of 45 total seconds, which also made comparison of the results much easier.
 
-For one scenario the results could be slightly different, that is why every test was repeated 10 times. For creation of the graphs presented in chapter \ref{chapter:7} for each test an average response times were calculated. % TODO ref chapter 7 
+For one scenario the results could be slightly different, that is why every test was repeated 10 times. For creation of the graphs presented in chapter \ref{cha:results} for each test an average response times were calculated. 
 
 \begin{figure}[H]
     \includegraphics[width=\columnwidth]{pictures/vusPerSecond.png}
