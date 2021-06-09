@@ -12,18 +12,18 @@ For every application the operations on the \acrlong{pg} database may be slightl
 
 Database creation is based on environment variables, as it makes it easier for connecting the applications to the database later. For the connection, the following variables need to be present:
 \begin{itemize}
-    \item POSTGRES\_DB, which is the name of the database, set to postgres,
-    \item POSTGRES\_USER, the default database user, set to postgres,
-    \item POSTGRES\_PASSWORD as the defaults' user password, set to postgres,
-    \item POSTGRES\_HOST required only for applications - it is the hostname where the database can be found - because of how the docker networks work, it needs to be set to the container name - postgres,
-    \item POSTGRES\_PORT which is the port on which the database is exposed - set to 5432
+  \item POSTGRES\_DB, which is the name of the database, set to postgres,
+  \item POSTGRES\_USER, the default database user, set to postgres,
+  \item POSTGRES\_PASSWORD as the defaults' user password, set to postgres,
+  \item POSTGRES\_HOST required only for applications - it is the hostname where the database can be found - because of how the docker networks work, it needs to be set to the container name - postgres,
+  \item POSTGRES\_PORT which is the port on which the database is exposed - set to 5432
 \end{itemize}
 
 \subsection{Initial population creation}
 
-For every application the script responsible for seeding the database looks basically the same, but for the different frameworks the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script, to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
+As mentioned in subsection \ref{sub:population}, most endpoints need existing database population to work. For every application the script responsible for seeding the database looks basically the same, but for the different frameworks the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script, to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
 
-Each framework (or library providing database support) has it's own built in methods for \acrshort{crud} operations, and they may be slightly different from each other. For example, Express.js and ASP.NET Core framework automatically wrap statements in a transaction. ASP.NET in each transaction sets the transaction isolation level and uses prepared statements, which then are executed with required parameters. In listings \ref{lst:aspnetPopulateLog} \ref{lst:expressPopulateLog} and \ref{lst:djangoPopulateLog} there are presented example log queries for initial user population creation.
+Each framework (or library providing database support) has it's own built in methods for \acrshort{crud} operations, and they may be slightly different from each other. For example, Express.js and ASP.NET Core framework automatically wrap statements in a transaction. ASP.NET in each transaction sets the transaction isolation level and uses prepared statements, which then are executed with required parameters. In listings \ref{lst:aspnetPopulateLog} \ref{lst:expressPopulateLog} and \ref{lst:djangoPopulateLog} there are presented example log queries from initial user population creation.
 
 \input{listings/aspnetPopulateLog.tex}
 \input{listings/expressPopulateLog.tex}
@@ -33,69 +33,69 @@ Each framework (or library providing database support) has it's own built in met
 
 For the load tests, applications were prepared with 6 endpoints:
 \begin{itemize}
-    \item GET /status/
-          \begin{itemize}
-              \item Description: required for the script, allows to check if the server has properly started and can properly respond to requests
-              \item Response code: 200
-              \item Response body: empty
-          \end{itemize}
-    \item GET /users/\{id\}/
-          \begin{itemize}
-              \item Description: retrieves user with given id from the database
-              \item Database operation: retrieve
-              \item Parameters:
-                    \begin{itemize}
-                        \item id - path parameter, id of the user to be retrieved
-                    \end{itemize}
-              \item Response code: 200
-              \item Response body: User model
-          \end{itemize}
-    \item GET /users/?limit=\{limit\}\&offset=\{offset\}
-          \begin{itemize}
-              \item Description: retrieves multiple users - allows to check the frameworks serialization speed
-              \item Database operation: retrieve
-              \item Parameters:
-                    \begin{itemize}
-                        \item limit - query parameter, amount of users returned
-                        \item offset - query parameter, amount of rows to skip from the beginning
-                    \end{itemize}
-              \item Response code: 200
-              \item Response body: User model array
-          \end{itemize}
-    \item DELETE /users/\{id\}/
-          \begin{itemize}
-              \item Description: Removes user with given id
-              \item Database operation: delete
-              \item Parameters:
-                    \begin{itemize}
-                        \item id - path parameter, id of the user to be removed
-                    \end{itemize}
-              \item Response code: 204
-              \item Response body: empty
-          \end{itemize}
-    \item POST /users/
-          \begin{itemize}
-              \item Description: Creates user from details provided in body
-              \item Database operation: create
-              \item Request body: User model to be created
-              \item Response code: 201
-              \item Response body: User model
-          \end{itemize}
-    \item PUT /users/\{id\}/
-          \begin{itemize}
-              \item Description: Updates user with given id from details provided in body
-              \item Database operation: update
-              \item Request body: User model to be created
-              \item Parameters:
-                    \begin{itemize}
-                        \item id - path parameter, id of the user to be removed
-                    \end{itemize}
-              \item Response code: 201
-              \item Response body: User model
-          \end{itemize}
+  \item GET /status/
+        \begin{itemize}
+          \item Description: required for the script, allows to check if the server has properly started and can properly respond to requests
+          \item Response code: 200
+          \item Response body: empty
+        \end{itemize}
+  \item GET /users/\{id\}/
+        \begin{itemize}
+          \item Description: retrieves user with given id from the database
+          \item Database operation: retrieve
+          \item Parameters:
+                \begin{itemize}
+                  \item id - path parameter, id of the user to be retrieved
+                \end{itemize}
+          \item Response code: 200
+          \item Response body: User model
+        \end{itemize}
+  \item GET /users/?limit=\{limit\}\&offset=\{offset\}
+        \begin{itemize}
+          \item Description: retrieves multiple users - allows to check the frameworks serialization speed
+          \item Database operation: retrieve
+          \item Parameters:
+                \begin{itemize}
+                  \item limit - query parameter, amount of users returned
+                  \item offset - query parameter, amount of rows to skip from the beginning
+                \end{itemize}
+          \item Response code: 200
+          \item Response body: User model array
+        \end{itemize}
+  \item DELETE /users/\{id\}/
+        \begin{itemize}
+          \item Description: Removes user with given id
+          \item Database operation: delete
+          \item Parameters:
+                \begin{itemize}
+                  \item id - path parameter, id of the user to be removed
+                \end{itemize}
+          \item Response code: 204
+          \item Response body: empty
+        \end{itemize}
+  \item POST /users/
+        \begin{itemize}
+          \item Description: Creates user from details provided in body
+          \item Database operation: create
+          \item Request body: User model to be created
+          \item Response code: 201
+          \item Response body: User model
+        \end{itemize}
+  \item PUT /users/\{id\}/
+        \begin{itemize}
+          \item Description: Updates user with given id from details provided in body
+          \item Database operation: update
+          \item Request body: User model to be created
+          \item Parameters:
+                \begin{itemize}
+                  \item id - path parameter, id of the user to be removed
+                \end{itemize}
+          \item Response code: 201
+          \item Response body: User model
+        \end{itemize}
 \end{itemize}
 
-% TODO describe User model, User model array
+"User model" mentioned above is the JSON object consisting of fields shown in table \ref{tab:dbModel}, and "User model array" is an array of these objects.
 
 \section{Environment}
 

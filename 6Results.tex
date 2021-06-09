@@ -4,8 +4,29 @@
 
 \section{Performance}
 
-Table \ref{tab:resultsFromFile} shows an average of 95th percentile from the 10 tests mentioned in the previous chapters.   
+Table \ref{tab:resultsFromFile} shows an average response time from the 10 tests mentioned in the previous chapters.
 
 \input{tables/tableResultsFromFile}
 
 \section{Security}
+
+\subsection{Security Misconfiguration}
+% DJANGO
+% https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+% python3 manage.py check --deploy
+% https://hdivsecurity.com/owasp-security-misconfiguration
+\subsection{Injection}
+% DJANGO
+% https://hdivsecurity.com/sql-injection-prevention
+% https://docs.djangoproject.com/en/3.2/topics/security/#sql-injection-protection
+% Injections can be done using inserting raw() queries
+\subsection{Insufficient Logging}
+% DJANGO
+% https://docs.djangoproject.com/en/3.0/topics/logging/
+% https://pypi.org/project/django-automated-logging/
+% https://pypi.org/project/django-log-viewer/
+% When your application has insufficient logging and monitoring, attacks and suspicious activity can go unnoticed. By default, Django uses the Python native logging module for system logging. 
+% django.security.* logging messages.
+
+% ASPNET
+% https://www.infoq.com/presentations/owasp-top-10-vulnerabilities-2017/

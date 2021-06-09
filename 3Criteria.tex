@@ -24,9 +24,7 @@ The scenarios chosen for tests are:
     \item 128 \acrshort{vu}s
     \item 512 \acrshort{vu}s
 \end{itemize}
-For a single virtual user case the number of concurrences does not change throughout the duration of the test, however, as suggested in
-% TODO find article that suggests this
-, for bigger numbers of concurrent users, the tests should include warmup and cooldown period. All tests are 45 seconds long, and tests with more than 1 virtual user include 15 seconds of ramp up time and 15 seconds of ramp down time as shown on figure \ref{fig:vusPerSecond}.
+For a single virtual user case the number of concurrences does not change throughout the duration of the test, however, as suggested in a few articles and k6 documentation, for bigger numbers of concurrent users, it is recommended for the tests to include warmup and cooldown period \cite{whyRampUp} \cite{importanceOfRampUp} \cite{k6LoadTesting}. All tests are 45 seconds long, and tests with more than 1 virtual user include 15 seconds of ramp up time and 15 seconds of ramp down time as shown on figure \ref{fig:vusPerSecond}.
 
 Longer test times did not bring any satisfactory results and only caused CPU throttling problems, thus they were shortened to the period of 45 total seconds, which also made comparison of the results much easier.
 
@@ -39,7 +37,7 @@ For one scenario the results could be slightly different, that is why every test
 \end{figure}
 
 
-\subsection{Data}
+\subsection{Data}\label{sub:population}
 
 For the performance tests some frameworks required initial data to exist in the database (for example PUT endpoint for editing database models), thus at the beginning of the tests for each framework the database is populated. To be sure that the data is consistent, after seeding the database the docker volume that keeps the data is being stored locally, and before each test it is being restored.
 
@@ -63,3 +61,13 @@ Frameworks used to build the application were in the versions presented in table
 \input{tables/software}
 
 \section{Security}
+To try to answer the question how secure are the frameworks, three points from \acrshort{owasp} Top 10 API Security vulnerabilities list were chosen. To be precise:
+\begin{itemize}
+    \item Security Misconfiguration, such as incomplete or unsecure default configurations, permissive \acrshort{cors} or error messages that expose sensitive information,
+    \item Injection, such as \acrshort{sql}, NoSQL or Command Injection, where attacker can trick the interpreter into executing unintended commands,
+    \item Insufficient Logging \& Monitoring, which extends the time of detecting a breach into the system \cite{owaspTop10}.
+\end{itemize}
+For security misconfiguration section there will be mentioned common mistakes that can be done when deploying the application and explained harm that can be done when they happen.
+Application security will be checked with injection attacks - malicious data will be used to try to exploit the system and return values that should not be available on given path.
+The last thing to mention in security part of this thesis will be logging possibilities of the package and showing how to configure it properly.
+% TODO definitely check after results in security
