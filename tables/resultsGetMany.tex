@@ -1,0 +1,15 @@
+\FloatBarrier
+\begin{table}[!htp]\centering
+    \caption{Average p(95) response time in tests}\label{tab:resultsGetMany}
+    \scriptsize
+    \begin{tabular}{lrrrrr}\toprule
+        test    & concurrency & aspnet & django    & express \\\midrule
+        getMany & 1           & 47.75  & 54.77     & 10.37   \\
+        getMany & 8           & 42.03  & 267.56    & 11.72   \\
+        getMany & 32          & 62.94  & 979.83    & 25.03   \\
+        getMany & 128         & 112.69 & 3,897.61  & 69.38   \\
+        getMany & 512         & 273.04 & 15,952.84 & 252.17  \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\FloatBarrier

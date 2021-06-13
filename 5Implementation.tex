@@ -82,7 +82,7 @@ Unlike in Django, routes and endpoints are not separated in two files. It is ver
 %
 \section{ASP.NET}
 \subsection{Model}
-Model in ASP.NET Core is a class that serves a similar purpose to Django model (shown in subsection \ref{sub:djangoModel}). It defines all the fields that need to be placed in the database model, including the names, types and constraints, using 'Required' and 'Column' decorators. In addition to that, using 'JsonProperty' decorator we can describe a field name that is later used in serialization and deserialization, so we do not have to specify a serializer manually later. Model is presented in listing \ref{lst:aspnetModel}.
+Model in ASP.NET Core is a class that serves a similar purpose to Django model (shown in subsection \ref{sub:djangoModel}). It defines all the fields that need to be placed in the database model, including the names, types and constraints, using \lstinline{Required} and \lstinline{Column} decorators. In addition to that, using \lstinline{JsonProperty} decorator we can describe a field name that is later used in serialization and deserialization, so we do not have to specify a serializer manually later. Model is presented in listing \ref{lst:aspnetModel}.
 \input{listings/aspnetModel.tex}
 
 \subsection{Database connection and initialization}
@@ -91,7 +91,7 @@ Connection to the database looked more similar in Express.js - we need to get al
 \input{listings/aspnetSeedDb.tex}
 
 \subsection{Routing and Endpoints}
-The code for controllers is quite lengthy, but that is because routing and endpoint definition is a part of database context class - using 'Route', 'HttpGet', 'HttpPost', 'HttpPut' and 'HttpDelete' decorators we are able to define routes for given functions. Request parameters are placed directly into the function arguments, using 'FromQuery', 'FromBody' clauses or by putting the argument in the decorator (for example 'HttpGet("{id}")'). All controllers can be seen in listing \ref{lst:aspnetEndpoints}.
+The code for controllers is quite lengthy, but that is because routing and endpoint definition is a part of database context class - using \lstinline{Route}, \lstinline{HttpGet}, \lstinline{HttpPost}, \lstinline{HttpPut} and \lstinline{HttpDelete} decorators we are able to define routes for given functions. Request parameters are placed directly into the function arguments, using \lstinline{FromQuery}, \lstinline{FromBody} clauses or by putting the argument in the decorator (for example \lstinline[mathescape]!HttpGet({id})!). All controllers can be seen in listing \ref{lst:aspnetEndpoints}.
 \input{listings/aspnetEndpoints.tex}
 
 %
@@ -154,13 +154,13 @@ Setup function is the first user-defined thing that runs when the k6 application
 \subsection{Get and delete tests}
 Listing \ref{lst:k6Get} shows get test, which is the simplest of the group, so it is going to be used to explain the whole k6 test structure.
 Delete test is almost the same - it differs in the request method (it sends DELETE instead of GET) and the response status checked (204 instead of 200).
-Variable 'options' is used by k6 to determine scenarios for the tests and timeout for the setup function.
+Variable \lstinline{options} is used by k6 to determine scenarios for the tests and timeout for the setup function.
 Setup function was mentioned in the previous subsection, it waits for the application to be started.
 Handle summary function is executed at the end of the test, it is configured to export the results to the \acrshort{csv} file.
 And finally default function exists to be run by the \acrshort{vu}s. Choosing the user for a request is based on two variables:
 \begin{itemize}
-    \item \_\_VU - identification number of the \acrshort{vu} that executes this function,
-    \item and \_\_ITER - which is the number of iteration that the current \acrshort{vu} is running.
+    \item \lstinline{__VU} - identification number of the \acrshort{vu} that executes this function,
+    \item and \lstinline{__ITER} - which is the number of iteration that the current \acrshort{vu} is running.
 \end{itemize}
 Function that chooses the id for the user is presented in listing \ref{lst:k6GetId}.
 After the request is finished a status is checked for verification if the responses were correct.
@@ -174,12 +174,12 @@ Code common for all tests has been cut from listings \ref{lst:k6GetMany}, \ref{l
 Retrieving multiple users from the database operates on two variables - limit and offset. Limit was set to 100 in these tests - as presented in the chapter \ref{cha:results}, this already caused high stress for the applications compared to the other tests and allowed to create meaningful results. Offset variable changes with iteration - with each iteration next 100 rows are queried from the database. The exact methods are presented in listing \ref{lst:k6GetMany}.
 \input{listings/k6GetMany.tex}
 
-\section{Put test}
-Put test introduce two new functions called 'getUser' and 'changeUser'. The first one, presented in listing \ref{lst:k6GetUser}, creates a user unique for given iteration of \acrshort{vu} id, and the second one, shown in listing \ref{lst:k6ChangeUser}, introduces a small change to the user - changes its username for update. What is more, a 'Content-Type' header had to be set to 'application/json', as we are sending a \acrshort{json} content in the request.
+\subsection{Put test}
+Put test introduce two new functions called \lstinline{getUser} and \lstinline{changeUser}. The first one, presented in listing \ref{lst:k6GetUser}, creates a user unique for given iteration of \acrshort{vu} id, and the second one, shown in listing \ref{lst:k6ChangeUser}, introduces a small change to the user - changes its username for update. What is more, a \lstinline{Content-Type} header had to be set to \lstinline{application/json}, as we are sending a \acrshort{json} content in the request.
 \input{listings/k6Put.tex}
 \input{listings/k6GetUser.tex}
 \input{listings/k6ChangeUser.tex}
 
-\section{Post test}
-This test uses mentioned in the previous section function 'getUser' to create a new user in the database. Users will not collide with each other since post test starts its execution on an empty database.
+\subsection{Post test}
+This test uses mentioned in the previous section function \lstinline{getUser} to create a new user in the database. Users will not collide with each other since post test starts its execution on an empty database.
 \input{listings/k6Post.tex}

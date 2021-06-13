@@ -1,0 +1,15 @@
+\FloatBarrier
+\begin{table}[!htp]\centering
+    \caption{Average p(95) response time in tests}\label{tab:resultsPost}
+    \scriptsize
+    \begin{tabular}{lrrrrr}\toprule
+        test & concurrency & aspnet & django   & express \\\midrule
+        post & 1           & 2.64   & 10.01    & 1.96    \\
+        post & 8           & 3.23   & 39.15    & 2.85    \\
+        post & 32          & 8.76   & 122.65   & 8.88    \\
+        post & 128         & 33.33  & 456.62   & 35.03   \\
+        post & 512         & 127.33 & 1,894.51 & 139.06  \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\FloatBarrier

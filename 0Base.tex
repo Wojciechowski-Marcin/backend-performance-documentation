@@ -34,6 +34,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[acronym]{glossaries}
 
+
 \input{glossaries.tex}
 
 \renewcommand{\labelenumii}{\theenumii}
@@ -68,14 +69,13 @@ database applications}
 \specialisation{Internet Engineering (INE)}
 
 \begin{document}
-
 \bibliographystyle{ieeetr}
-
 \maketitle
 
 % DEDYKACJA
 % \dedication{6cm}{To jest przykładowa treść opcjonalnej dedykacji, należy ją zmienić lub usunąć w całości polecenie \texttt{$\backslash$dedication}}
 
+\setcounter{tocdepth}{1}
 \tableofcontents
 
 %
@@ -83,7 +83,6 @@ database applications}
 % TRESC PRACY
 %
 %
-
 
 \addcontentsline{toc}{chapter}{Acronyms and abbreviations}
 \printnoidxglossary[type=\acronymtype, title=Acronyms and abbreviations, toctitle=List of Acronyms and abbreviations]
@@ -105,13 +104,13 @@ database applications}
 % \appendix
 % \chapter{Donec cursus nulla vitae pede}
 
-\addcontentsline{toc}{chapter}{\bibname} %utworzenie w spisie treści pozycji Literatura
-\bibliography{bibliografia} % wstawia bibliografię korzystając z pliku bibliografia.bib - dotyczy BibTeXa, jeżeli nie korzystamy z BibTeXa należy użyć otoczenia thebibliography
+\addcontentsline{toc}{chapter}{\bibname}
+\bibliography{bibliografia}
 \addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
 \addcontentsline{toc}{chapter}{List of Code Listings}
 \lstlistoflistings
-\addcontentsline{toc}{chapter}{List of Algorithms}
-\listofalgorithms
+% \addcontentsline{toc}{chapter}{List of Algorithms}
+% \listofalgorithms
 
 \end{document}

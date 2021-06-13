@@ -4,18 +4,30 @@
 
 \section{Performance}
 
-Table \ref{tab:resultsFromFile} shows an average response time from the 10 tests mentioned in the previous chapters.
+% Table \ref{tab:resultsFromFile} shows an average response time from the 10 tests mentioned in the previous chapters.
 
-\input{tables/tableResultsFromFile}
+\input{figures/resultsDelete.tex}
+\input{tables/resultsDelete.tex}
+
+\input{figures/resultsGet.tex}
+\input{tables/resultsGet.tex}
+
+\input{figures/resultsGetMany.tex}
+\input{tables/resultsGetMany.tex}
+
+\input{figures/resultsPost.tex}
+\input{tables/resultsPost.tex}
+
+\input{figures/resultsPut.tex}
+\input{tables/resultsPut.tex}
 
 \section{Security}
-
 \subsection{Security Misconfiguration}
 \subsubsection{Django}
 Django has one configuration file, generated automatically at the project creation. At the starting lines of settings.py a few important variables and comments are placed (listing \ref{lst:djangoSettings}).
 \input{listings/djangoSettings.tex}.
-As we can see, the creators of Django clearly want the developers to prevent some security vulnerabilities, by placing SECURITY WARNING comments above two crucial variables - SECRET\_KEY and DEBUG.
-SECRET\_KEY is used in:
+As we can see, the creators of Django clearly want the developers to prevent some security vulnerabilities, by placing \lstinline{SECURITY WARNING} comments above two crucial variables - \lstinline{SECRET_KEY} and \lstinline{DEBUG}.
+\lstinline{SECRET_KEY} is used in:
 \begin{itemize}
     \item Generating session tokens
     \item Generating password reset tokens
@@ -26,7 +38,7 @@ SECRET\_KEY is used in:
           %  https://docs.djangoproject.com/en/3.2/topics/signing/
 \end{itemize}.
 All of them are very serious risks and should be avoided by any means. App created for this research is tiny does not have any serious logic other than working on a database model, so cryptographic signing is not used at all. For any commercial applications leaking this variable could cause a lot of harm.
-The second risky variable - DEBUG - is responsible for turning on and off a debug mode. When set to True, whenever an error happens Django will display a detailed traceback, including parts of the applications source code and environment variables (such as Django settings).
+The second risky variable - \lstinline{DEBUG} - is responsible for turning on and off a debug mode. When set to True, whenever an error happens Django will display a detailed traceback, including parts of the applications source code and environment variables (such as Django settings).
 Django developers thought about it being a little secure in case of accidental leakage by excluding from the message variables containing the following strings:
 \begin{itemize}
     \item 'API'
@@ -38,8 +50,9 @@ Django developers thought about it being a little secure in case of accidental l
 \end{itemize}
 % TODO show a screen where if(id === 10): admin = True
 
-Third important variable that cannot be forgotten is ALLOWED\_HOSTS (without SECURITY WARNING comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When DEBUG is set to True and this variable is empty, the only way to reach the app is by requesting localhost.
+Third important variable that cannot be forgotten is \lstinline{ALLOWED_HOSTS} (without SECURITY WARNING comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When \lstinline{DEBUG} is set to True and this variable is empty, the only way to reach the app is by requesting localhost.
 
+To help the developers, Django offers a command \lstinline{python3 manage.py check --deploy} command.
 \input{listings/djangoCheckDeploy.tex}
 % https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 % python3 manage.py check --deploy

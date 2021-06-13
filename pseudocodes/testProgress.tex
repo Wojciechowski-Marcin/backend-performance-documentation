@@ -8,20 +8,22 @@
     test cases = [get post put delete getMany]\;
 
     \ForAll{frameworks}{
+        start application and database\;
         populate database\;
+        kill application and database\;
         store snapshot\;
         \ForAll{scenarios}{
             \ForAll{iterations}{
                 \ForAll{test cases}{
-                    \If{application is running}{kill application\;}
+                    \If{application is running}{kill application and database\;}
                     remove volumes\;
                     \If{test case is not post}{restore snapshot\;}
-                    start application\;
+                    start application and database\;
                     \While{application is not responding}{wait for application\;}
                     \For{45 seconds}{measured test\;}
                     store k6 result \;
                     store influxDB result \;
-                    \For{20 seconds}{cooldown \;}
+                    \For{20 seconds}{cooldown before next test\;}
                 }
             }
         }

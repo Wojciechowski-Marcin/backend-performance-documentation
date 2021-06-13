@@ -8,33 +8,28 @@
 The task for each application is to complete simple \acrshort{crud} operations as fast as possible. For comparison of the performance of the applications, a few test cases were developed:
 
 \begin{itemize}
-    \item retrieving multiple objects (getMany)
-    \item retrieving single object (get)
-    \item updating a single object (put)
-    \item creating a single object (post)
-    \item deleting a single object (delete)
+  \item retrieving multiple objects (getMany)
+  \item retrieving single object (get)
+  \item updating a single object (put)
+  \item creating a single object (post)
+  \item deleting a single object (delete)
 \end{itemize}
 
 They were tested with a few different application loads, which are represented by a number of \acrlong{vu}s (\acrshort{vu}s) - as mentioned in the k6 repository description they are glorified, parallel while(true) loops \cite{k6Git}.
 The scenarios chosen for tests are:
 \begin{itemize}
-    \item 1 \acrshort{vu}
-    \item 8 \acrshort{vu}s
-    \item 32 \acrshort{vu}s
-    \item 128 \acrshort{vu}s
-    \item 512 \acrshort{vu}s
+  \item 1 \acrshort{vu}
+  \item 8 \acrshort{vu}s
+  \item 32 \acrshort{vu}s
+  \item 128 \acrshort{vu}s
+  \item 512 \acrshort{vu}s
 \end{itemize}
 For a single virtual user case the number of concurrences does not change throughout the duration of the test, however, as suggested in a few articles and k6 documentation, for bigger numbers of concurrent users, it is recommended for the tests to include warmup and cooldown period \cite{whyRampUp} \cite{importanceOfRampUp} \cite{k6LoadTesting}. All tests are 45 seconds long, and tests with more than 1 virtual user include 15 seconds of ramp up time and 15 seconds of ramp down time as shown on figure \ref{fig:vusPerSecond}.
 
 Longer test times did not bring any satisfactory results and only caused CPU throttling problems, thus they were shortened to the period of 45 total seconds, which also made comparison of the results much easier.
 
 For one scenario the results could be slightly different, that is why every test was repeated 10 times. For creation of the graphs presented in chapter \ref{cha:results} for each test an average response times were calculated.
-
-\begin{figure}[H]
-    \includegraphics[width=\columnwidth]{pictures/vusPerSecond.png}
-    \caption{Amount of VUs per second during the tests}
-    \label{fig:vusPerSecond}
-\end{figure}
+\input{figures/vusPerSecond.tex}
 
 
 \subsection{Data}\label{sub:population}
@@ -44,12 +39,6 @@ For the performance tests some frameworks required initial data to exist in the 
 \subsection{Application isolation}
 
 To be sure that the applications are running in an isolated environment, docker containers were used. The configuration prepared for the applications included environment preparation (installing necessary packages, providing environment variables), To simplify the research, a Docker Compose configuration was prepared, that builds and starts all the necessary containers at once.
-
-\subsection{Test progress}
-
-The main script prepared for this thesis, that gathers all the measurements is described in the algorithm \ref{alg:testProgress}.
-
-\input{pseudocodes/testProgress}
 
 \subsection{Software versions and hardware}
 
@@ -63,9 +52,9 @@ Frameworks used to build the application were in the versions presented in table
 \section{Security}
 To try to answer the question how secure are the frameworks, three points from \acrshort{owasp} Top 10 API Security vulnerabilities list were chosen. To be precise:
 \begin{itemize}
-    \item Security Misconfiguration, such as incomplete or unsecure default configurations, permissive \acrshort{cors} or error messages that expose sensitive information,
-    \item Injection, such as \acrshort{sql}, NoSQL or Command Injection, where attacker can trick the interpreter into executing unintended commands,
-    \item Insufficient Logging \& Monitoring, which extends the time of detecting a breach into the system \cite{owaspTop10}.
+  \item Security Misconfiguration, such as incomplete or unsecure default configurations, permissive \acrshort{cors} or error messages that expose sensitive information,
+  \item Injection, such as \acrshort{sql}, NoSQL or Command Injection, where attacker can trick the interpreter into executing unintended commands,
+  \item Insufficient Logging \& Monitoring, which extends the time of detecting a breach into the system \cite{owaspTop10}.
 \end{itemize}
 For security misconfiguration section there will be mentioned common mistakes that can be done when deploying the application and explained harm that can be done when they happen.
 Application security will be checked with injection attacks - malicious data will be used to try to exploit the system and return values that should not be available on given path.
