@@ -11,7 +11,7 @@
 \input{listings/postgresDockerCompose.tex}
 
 \subsection{Applications}
-It made utmost sense to place this section standalone and not within each application, since the configurations for all of them are very alike.
+It made utmost sense to place this section standalone and not explain each application separately, since the configurations for all of them are very alike.
 Dockerfiles are configured to install all necessary packages, place the code in suitable folders, specify a non-root user for the container to run as and set the entrypoint to a script that starts the application.
 The main differences between the Dockerfiles are the chosen images:
 \begin{itemize}
@@ -42,8 +42,7 @@ Django offers a built in User model, however it was decided not to use it in thi
 \subsection{Database connection and initialization}
 Django handles a lot of things for the user - connection is very simple - in initial project generation a file settings.py is created, which consists of all the necessary variables for the system to work. In the file we can find a variable named Databases, initially with SQLite backend. All that needs to be done to connect to our \acrlong{pg} is to change the engine to built-in \acrshort{pg} backend and change the remaining fields - name, user, password, host and port, as presented in listing \ref{lst:djangoDbConn}. With that done, the connection is automatically done on the system startup.
 \input{listings/djangoDbConnection.tex}
-Creating the table is handled by migration system - to create the migrations the command from listing \ref{lst:djangoMakeMigrations} had to be run.
-\input{listings/djangoMakeMigrations.tex}
+Creating the table is handled by migration system - to create the migrations the command \lstinline[language=bash]{python3 manage.py makemigrations} had to be run.
 This creates the tables based on the model presented in models.py files through the whole project. In this case, it only created one table.
 For creating the initial population a management function was prepared, that is being executed from the main script. Seeding the database was presented in listing \ref{lst:djangoSeedDb}.
 \input{listings/djangoSeedDb.tex}
@@ -56,7 +55,10 @@ Serialization is another great thing about Django and \acrlong{drf} - \acrshort{
 \input{listings/djangoSerialization.tex}
 
 \subsection{Endpoints}
-It is pretty certain at this point that django offers a lot of functionality. It should come with no surprise that the endpoints can also be implemented with a few lines of code, thanks to the built in methods. As shown in the listing \ref{lst:djangoViews}, creating views does not require much, only the queryset containing all user models and a serializer class.  With this ViewSet and one standalone function we get all the endpoints described in section \ref{sec:endpoints} of this document. UserViewSet class was used in the routing in file presented in listing \ref{lst:djangoUrlsApp}.
+It is pretty certain at this point that django offers a lot of functionality. It should come with no surprise that the endpoints can also be implemented with a few lines of code using the built in methods. As shown in the listing \ref{lst:djangoViews}, creating views does not require much, only the queryset containing all user models and a serializer class.  With this ViewSet and one standalone function we get all the endpoints described in section \ref{sec:endpoints} of this document. UserViewSet class was used in the routing in file presented in listing \ref{lst:djangoUrlsApp}.
+
+% TODO custom pagination
+
 \input{listings/djangoViews.tex}
 
 %
@@ -68,13 +70,13 @@ User model in express.js needs to contain all the necessary logic for handling \
 \input{listings/expressModel.tex}
 
 \subsection{Database connection and initialization}
-Work with express is a bit more difficult, as most of the configuration needs to be done by the user. To connect with the database, a postgres promise instance needs to be created. Because there is no migration system, creating the table also needs to be done manually. To do so, a database configuration file was created (listing \ref{lst:expressDbConnection}) and imported into the entrypoint file. It contains all the necessary information about the connection and creation of the table.
+Work with express is a bit more difficult, as most of the configuration needs to be done by the developer. To connect with the database, a postgres promise instance needs to be created. Because there is no migration system, creating the table also needs to be done manually on \acrshort{db} initialization. To do so, a database configuration file was created (listing \ref{lst:expressDbConnection}) and imported into the entrypoint file. It contains all the necessary information about the connection and creation of the table.
 \input{listings/expressDbConnection.tex}
 Initialization of the database is handled by function presented in listing \ref{lst:expressSeedDb}.
 \input{listings/expressSeedDb.tex}
 
 \subsection{Routing and endpoints}
-Unlike in Django, routes and endpoints are not separated in two files. It is very common to keep them in a single file, as shown in listing \ref{lst:expressEndpoints}. All they do is registering a route on the provided path in the first argument and executing the functions provided in the second argument. The mentioned functions call the respective method from User model sends appropriate response based on the return data of the query.
+Unlike in Django, routes and endpoints are not separated in two files. In this case it made more sense to keep them in a single file as shown in listing \ref{lst:expressEndpoints}, since the endpoints logic is not too long. All they do is registering a route on the provided path in the first argument and registering the callback provided in the second argument. The mentioned functions call the respective method from User model sends appropriate response based on the return data of the query.
 \input{listings/expressEndpoints.tex}
 
 %
@@ -91,14 +93,14 @@ Connection to the database looked more similar in Express.js - we need to get al
 \input{listings/aspnetSeedDb.tex}
 
 \subsection{Routing and Endpoints}
-The code for controllers is quite lengthy, but that is because routing and endpoint definition is a part of database context class - using \lstinline{Route}, \lstinline{HttpGet}, \lstinline{HttpPost}, \lstinline{HttpPut} and \lstinline{HttpDelete} decorators we are able to define routes for given functions. Request parameters are placed directly into the function arguments, using \lstinline{FromQuery}, \lstinline{FromBody} clauses or by putting the argument in the decorator (for example \lstinline[mathescape]!HttpGet({id})!). All controllers can be seen in listing \ref{lst:aspnetEndpoints}.
+The code for controllers is quite lengthy, but that is because routing and endpoint definition is a part of database context class - using \lstinline{Route}, \lstinline{HttpGet}, \lstinline{HttpPost}, \lstinline{HttpPut} and \lstinline{HttpDelete} decorators we are able to define routes for given functions. Request parameters are placed directly into the function arguments, using \lstinline{FromQuery}, \lstinline{FromBody} clauses or by putting the argument in the decorator (for example \lstinline[mathescape]!HttpGet({id})!). Controllers definition can be found in listing \ref{lst:aspnetEndpoints}.
 \input{listings/aspnetEndpoints.tex}
 
 %
 % SQL
 %
 \section{\acrshort{sql} queries comparison}
-\acrshort{sql} queries are being generated differently by ASP.NET Core and Django. In case of Express.js, it is developers role to create them, so they were prepared to try to match the queries from the other frameworks while still being relatively simple. Logs were gathered from \acrlong{pg} in a separate test with logging turned on (for performance tests logging was completely turned off).
+\acrshort{sql} queries are being generated differently by ASP.NET Core and Django. In case of Express.js with \acrlong{pg}, it is developers role to create them, so they were prepared to try to match the queries from the other frameworks while still being relatively simple. Logs were gathered from \acrlong{pg} in a separate test with logging turned on (for performance tests logging was completely turned off).
 Tables are created in the same fashion, except the primary key constraint in Django and Express.js is added right next to the definition of id field, and not separately as shown for ASP.NET in listing \ref{lst:sqlCreateTable}.
 \input{listings/sqlCreateTable.tex}
 ASP.NET Core uses parameterized queries (in \acrlong{pg} PREPARE and EXECUTE clauses), so log of the query is followed by parameters that the query was called with.
@@ -152,7 +154,7 @@ Setup function is the first user-defined thing that runs when the k6 application
 \input{listings/k6Setup.tex}
 
 \subsection{Get and delete tests}
-Listing \ref{lst:k6Get} shows get test, which is the simplest of the group, so it is going to be used to explain the whole k6 test structure.
+Listing \ref{lst:k6Get} shows get test, which belongs to the group of tests with the simplest implementations, so it is going to be used to explain the whole k6 test structure.
 Delete test is almost the same - it differs in the request method (it sends DELETE instead of GET) and the response status checked (204 instead of 200).
 Variable \lstinline{options} is used by k6 to determine scenarios for the tests and timeout for the setup function.
 Setup function was mentioned in the previous subsection, it waits for the application to be started.
@@ -171,7 +173,7 @@ Code common for all tests has been cut from listings \ref{lst:k6GetMany}, \ref{l
 \input{listings/k6GetId.tex}
 
 \subsection{Get many test}
-Retrieving multiple users from the database operates on two variables - limit and offset. Limit was set to 100 in these tests - as presented in the chapter \ref{cha:results}, this already caused high stress for the applications compared to the other tests and allowed to create meaningful results. Offset variable changes with iteration - with each iteration next 100 rows are queried from the database. The exact methods are presented in listing \ref{lst:k6GetMany}.
+Retrieving multiple users from the database operates on two variables - limit and offset. Limit was set to 100 in these tests - as presented in the chapter \ref{cha:results}, this already caused high stress for the applications compared to the other tests and allowed to create meaningful results. Offset variable changes with iteration - each iteration increases the variable by 100 resulting in next 100 rows being queried from the database. The exact methods are presented in listing \ref{lst:k6GetMany}.
 \input{listings/k6GetMany.tex}
 
 \subsection{Put test}

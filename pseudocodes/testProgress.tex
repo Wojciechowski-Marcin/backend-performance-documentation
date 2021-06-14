@@ -20,10 +20,10 @@
                     \If{test case is not post}{restore snapshot\;}
                     start application and database\;
                     \While{application is not responding}{wait for application\;}
-                    \For{45 seconds}{measured test\;}
+                    \For{30 seconds}{measured test\;}
                     store k6 result \;
                     store influxDB result \;
-                    \For{20 seconds}{cooldown before next test\;}
+                    \For{30 seconds}{cooldown before next test\;}
                 }
             }
         }

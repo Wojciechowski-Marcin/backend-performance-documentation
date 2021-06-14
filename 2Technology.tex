@@ -5,7 +5,8 @@
 
 \section{\acrlong{pg}}
 
-For the Database Management System I chose \acrlong{pg}, which is the second most popular choice among database technologies \cite{devSurveyDb}.
+% For the Database Management System I chose \acrlong{pg}, which is the second most popular choice among database technologies \cite{devSurveyDb}.
+TODO
 
 \section{Django}
 
@@ -29,7 +30,7 @@ In Django application there are multiple files and at first it may not be obviou
 Templates, which are not mentioned above, are the Django's custom views - in case of application for my tests, it is going to be using build in json parsers.
 
 \subsection{Requirements and dependencies}
-Fortunately Django has a built in \acrlong{pg} engine, so no additional packages need to be added for this to work. However, for the sake of this research, a popular package \acrlong{drf} package was added (over 21k stars on github), as it provides well thought set of base components for building \acrshort{api}s, often reducing the amount of code that needs to be written.
+Fortunately Django has a built in \acrlong{pg} engine, so no additional packages need to be added for it to work. However, for the sake of this research, a popular package \acrlong{drf} package was added (over 21k stars on github), as it provides well thought set of base components for building \acrshort{api}s, often reducing the amount of code that needs to be written.
 Deploying django can be currently done by two interfaces:
 \begin{itemize}
   \item \acrshort{wsgi}, which is the main Python standard for communicating between servers and applications
@@ -49,7 +50,7 @@ Express is the most popular web framework with almost 17 million weekly download
 Express.js is an unopinionated framework, which means theres more than one "right" way to achieve a given result - there is no strict architecture that the developer has to follow.
 
 \subsection{Requirements}
-Application for the research in this thesis is very minimalistic itself, hence there are not many additional packages that need to be added. There is only one bundle downloaded from the \acrshort{npm} repository, which is pg-promise. Initially it was a package that expanded the base library - node-postgres by adding promises to the base driver, but since then the library's functionality was vastly expanded \cite{pgPromiseGit}.
+Application for the research in this thesis is very minimalistic itself, hence there are not many additional packages that need to be added. There is only one bundle downloaded from the \acrshort{npm} repository, which is pg-promise. Initially it was a package that expanded the base library called node-postgres by adding promises (\acrlong{js} way of handling asynchronous functions) to the base driver, but since then the library's functionality was vastly expanded \cite{pgPromiseGit}.
 The expanded version of the driver was chosen, because of it's popularity - at the day of accessing the libraries the number of weekly downloads of node-postgres (2k) \cite{nodePostgresNpm} was only a tiny fraction of pg-promise's (172k) \cite{pgPromiseNpm}.
 
 To make the application work properly for editing or creating objects, a middleware package body-parser had to be added, that parses incoming request bodies from a json format into a \acrshort{js} object \cite{bodyParser}.

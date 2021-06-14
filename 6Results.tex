@@ -4,22 +4,24 @@
 
 \section{Performance}
 
+WIP
+
 % Table \ref{tab:resultsFromFile} shows an average response time from the 10 tests mentioned in the previous chapters.
 
-\input{figures/resultsDelete.tex}
-\input{tables/resultsDelete.tex}
+% \input{figures/resultsDelete.tex}
+% \input{tables/resultsDelete.tex}
 
-\input{figures/resultsGet.tex}
-\input{tables/resultsGet.tex}
+% \input{figures/resultsGet.tex}
+% \input{tables/resultsGet.tex}
 
-\input{figures/resultsGetMany.tex}
-\input{tables/resultsGetMany.tex}
+% \input{figures/resultsGetMany.tex}
+% \input{tables/resultsGetMany.tex}
 
-\input{figures/resultsPost.tex}
-\input{tables/resultsPost.tex}
+% \input{figures/resultsPost.tex}
+% \input{tables/resultsPost.tex}
 
-\input{figures/resultsPut.tex}
-\input{tables/resultsPut.tex}
+% \input{figures/resultsPut.tex}
+% \input{tables/resultsPut.tex}
 
 \section{Security}
 \subsection{Security Misconfiguration}
@@ -50,7 +52,7 @@ Django developers thought about it being a little secure in case of accidental l
 \end{itemize}
 % TODO show a screen where if(id === 10): admin = True
 
-Third important variable that cannot be forgotten is \lstinline{ALLOWED_HOSTS} (without SECURITY WARNING comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When \lstinline{DEBUG} is set to True and this variable is empty, the only way to reach the app is by requesting localhost.
+Third important variable that cannot be forgotten is \lstinline{ALLOWED_HOSTS} (without \lstinline{SECURITY WARNING} comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When \lstinline{DEBUG} is set to True and this variable is empty, the only way to reach the app is by requesting localhost.
 
 To help the developers, Django offers a command \lstinline{python3 manage.py check --deploy} command.
 \input{listings/djangoCheckDeploy.tex}
