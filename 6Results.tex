@@ -4,28 +4,26 @@
 
 \section{Performance}
 
-WIP
+Graphs below (\ref{tab:resultsGet}, \ref{tab:resultsGetMany}, \ref{tab:resultsDelete}, \ref{tab:resultsPost} and \ref{tab:resultsPut}) show an average response time in miliseconds by number of concurrent \acrshort{vu}s from the tests mentioned in previous chapters. To better show the results of the tests, on vertical axis a logarithmic scale has been used, as Django had very long response times in comparison to other two frameworks. Under each graph there is a table with data used to draw the mentioned graphs - average response times rounded to second decimal place. As seen on the results, in cases with small amount concurrent requests Express.js application was the fastest. Starting from 32 \acrlong{vu}s for get requests, 128 for post and put requests and 512 for getMany ASP.NET Core has faster results. The trend line in all charts (except for delete tests, where ASP.NET is slower than express in all tests by from 8\% to 49\% depending on concurrency) shows that Express.js handles bigger loads worse than ASP.NET. In most tests Django stands out very far from the others, being even up to almost 17 times slower (for get tests with 8 concurrency) than the opponents. This framework surprised on getMany tests, where it was slower by only 15\% than the second best result - ASP.NET. 
 
-% Table \ref{tab:resultsFromFile} shows an average response time from the 10 tests mentioned in the previous chapters.
+\input{figures/resultsGet.tex}
+\input{tables/resultsGet.tex}
 
-% \input{figures/resultsDelete.tex}
-% \input{tables/resultsDelete.tex}
+\input{figures/resultsGetMany.tex}
+\input{tables/resultsGetMany.tex}
 
-% \input{figures/resultsGet.tex}
-% \input{tables/resultsGet.tex}
+\input{figures/resultsDelete.tex}
+\input{tables/resultsDelete.tex}
 
-% \input{figures/resultsGetMany.tex}
-% \input{tables/resultsGetMany.tex}
+\input{figures/resultsPost.tex}
+\input{tables/resultsPost.tex}
 
-% \input{figures/resultsPost.tex}
-% \input{tables/resultsPost.tex}
-
-% \input{figures/resultsPut.tex}
-% \input{tables/resultsPut.tex}
+\input{figures/resultsPut.tex}
+\input{tables/resultsPut.tex}
 
 \section{Security}
 \subsection{Security Misconfiguration}
-\subsubsection{Django}
+\subsubsection{Django specific variables}
 Django has one configuration file, generated automatically at the project creation. At the starting lines of settings.py a few important variables and comments are placed (listing \ref{lst:djangoSettings}).
 \input{listings/djangoSettings.tex}.
 As we can see, the creators of Django clearly want the developers to prevent some security vulnerabilities, by placing \lstinline{SECURITY WARNING} comments above two crucial variables - \lstinline{SECRET_KEY} and \lstinline{DEBUG}.
@@ -50,9 +48,10 @@ Django developers thought about it being a little secure in case of accidental l
     \item 'SIGNATURE'
     \item 'TOKEN'
 \end{itemize}
-% TODO show a screen where if(id === 10): admin = True
+% TODO show a screen where if(id === 10): admin = True 
+% coś jak to https://www.troyhunt.com/content/images/2016/02/848847image11.png
 
-Third important variable that cannot be forgotten is \lstinline{ALLOWED_HOSTS} (without \lstinline{SECURITY WARNING} comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When \lstinline{DEBUG} is set to True and this variable is empty, the only way to reach the app is by requesting localhost.
+Third important variable that cannot be forgotten is \lstinline{ALLOWED_HOSTS} (without \lstinline{SECURITY WARNING} comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When \lstinline{DEBUG} is set to True and this variable is empty, the only way to get response from the app is by requesting localhost.
 
 To help the developers, Django offers a command \lstinline{python3 manage.py check --deploy} command.
 \input{listings/djangoCheckDeploy.tex}
@@ -60,7 +59,21 @@ To help the developers, Django offers a command \lstinline{python3 manage.py che
 % python3 manage.py check --deploy
 % https://hdivsecurity.com/owasp-security-misconfiguration
 \subsubsection{ASP.NET}
-\subsubsection{Express.js}
+
+Just like Django, ASP.NET can leak sensitive data placed in code with its default error handling.
+
+% TODO prepare a screen and write about it https://www.troyhunt.com/owasp-top-10-for-net-developers-part-6/
+
+\subsubsection{Common}
+\begin{itemize}
+    \item Use newest versions
+    % https://snyk.io/vuln/
+    \item Don't configure to run as root
+    \item limit request body size
+    \item tls/ssl
+    % https://nodegoat.herokuapp.com/tutorial/a5
+\end{itemize}
+
 \subsection{Injection}
 \subsubsection{Django}
 \subsubsection{ASP.NET}
