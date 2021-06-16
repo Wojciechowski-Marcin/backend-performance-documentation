@@ -26,7 +26,6 @@
         public object Get(
             [FromQuery] int limit, [FromQuery] int offset) {
             return _context.Users
-                .OrderBy(u => u.Id)
                 .Skip(offset)
                 .Take(limit)
                 .ToList();
