@@ -1,0 +1,4 @@
+\begin{lstlisting}[caption={Log of ASP.NET injection request},breaklines=true,label={lst:aspnetInjectionLog}]
+    LOG:  statement: INSERT INTO users (id, email, first_name, last_name, password, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id
+    DETAIL: parameters: $1 = 5, $2 = 'email', $3 = 'first_name', $4 = 'last_name', $5 = 'password''; drop table users;''', $6 = 'username'
+\end{lstlisting}
