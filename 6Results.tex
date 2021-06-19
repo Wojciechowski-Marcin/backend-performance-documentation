@@ -53,31 +53,42 @@ Django developers thought about it being a little secure in case of accidental l
 
 Third important variable that cannot be forgotten is \lstinline{ALLOWED_HOSTS} (without \lstinline{SECURITY WARNING} comment, as it is set to an empty array by default). This variable is meant to be a list of strings presenting host names that Django can send responses to. If a given host is not on the list and tries to request a resource, response with status 400 is sent immediately. When \lstinline{DEBUG} is set to True and this variable is empty, the only way to get response from the app is by requesting localhost.
 
-To help the developers, Django offers a command \lstinline{python3 manage.py check --deploy} command.
+To help the developers, Django offers a command \lstinline{python3 manage.py check --deploy} command. It includes a few essential steps to prepare the environment for production without security risks.
 \input{listings/djangoCheckDeploy.tex}
-% https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-% python3 manage.py check --deploy
-% https://hdivsecurity.com/owasp-security-misconfiguration
 
-\subsubsection{Common}
-\begin{itemize}
-    \item Use newest versions
-          % https://snyk.io/vuln/
-    \item Don't configure to run as root
-    \item limit request body size
-    \item tls/ssl
-          % https://nodegoat.herokuapp.com/tutorial/a5
-\end{itemize}
+\subsubsection{Common problems}
+There are a few things to remember when releasing any application to the world.
+\begin{enumerate}
+    \item Always use newest versions of frameworks and packages.
+
+          Every external dependency that is brought to the project may be adding an additional vulnerability to the application. That is what vulnerability databases were created for - when someone discovers a problem in a given software it is often added to a list including vulnerability description and version of the faulty package. Snyk can be an example of a vulnerability \acrshort{db}.
+          % TODO ref https://snyk.io/vuln/
+
+    \item Do not configure the application to run as root
+
+          This opens a window for the attacker to run malicious scripts or starting new child processes on a server.
+
+    \item Limit request body size
+
+          With unlimited sizes in body the server can be repetitively requested with large input payload, which could cause a server crash through running out of memory or keeping the processor busy.
+          % TODO ref https://nodegoat.herokuapp.com/tutorial/a5
+\end{enumerate}
 
 \subsection{Injection}
+Prepared applications were tested with user creation requests containing malicious \acrshort{sql} statements. Request body was prepared based on logs shown in \ref{lst:sqlPost} to check if the input string could be terminated and any other \acrshort{sql} statement could be executed.
 \input{figures/injectionRequest.tex}
+
+\acrshort{sql} logs of the requests are placed in listings \ref{lst:aspnetInjectionLog}, \ref{lst:expressInjectionLog} and \ref{lst:djangoInjectionLog}. As shown, the characters that could cause the harm in this case are escaped (single quotes are doubled) in all applications.
 \input{listings/aspnetInjectionLog.tex}
 \input{listings/expressInjectionLog.tex}
 \input{listings/djangoInjectionLog.tex}
+
+Further research shown that the \acrshort{sql} injection can happen in these frameworks with careless developers. All applications provide functions which allow to perform raw \acrshort{sql} queries on the database. If a developer uses this function in the code and forgets to escape variables that include the user input results in an application that could be easily exploited.
 % DJANGO
 % https://hdivsecurity.com/sql-injection-prevention
-% https://docs.djangoproject.com/en/3.2/topics/security/#sql-injection-protection
-% Injections can be done using inserting raw() queries
+% TODO ref https://docs.djangoproject.com/en/3.2/topics/security/#sql-injection-protection
+% TODO ref https://docs.djangoproject.com/en/3.2/topics/db/sql/#executing-raw-queries
+
 \subsection{Insufficient Logging}
 \subsubsection{Django}
 \subsubsection{ASP.NET}
