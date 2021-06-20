@@ -28,9 +28,8 @@ For a single virtual user case the number of concurrences does not change throug
 
 Longer test times did not bring any satisfactory results and only caused CPU throttling problems, thus they were shortened to the period of 30 total seconds, which also made comparison of the results much easier.
 
-For one scenario the results could be slightly different, that is why every test was repeated X times. For creation of the graphs presented in chapter \ref{cha:results} for each test average response times were calculated.
+For one scenario the results could be slightly different, that is why every test was repeated 3 times. For creation of the graphs presented in chapter \ref{cha:results} for each test average response times were calculated.
 \input{figures/vusPerSecond.tex}
-% TODO change X
 
 \subsection{Requirements}
 
@@ -78,5 +77,4 @@ To try to answer the question how secure are the frameworks, three points from \
 \end{itemize}
 For security misconfiguration section there will be mentioned common mistakes that can be done when deploying the application and explained harm that can be done when they happen.
 Application security will be checked with injection attacks - malicious data will be used to try to exploit the system and return values that should not be available on given path.
-The last thing to mention in security part of this thesis will be logging possibilities of the package and showing how to configure it properly.
-% TODO definitely check after results in security
+The last thing to mention in security part of this thesis will be logging possibilities of the framework.

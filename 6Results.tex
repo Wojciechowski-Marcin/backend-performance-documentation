@@ -29,24 +29,22 @@ Django has one configuration file, generated automatically at the project creati
 As we can see, the creators of Django clearly want the developers to prevent some security vulnerabilities, by placing \lstinline{SECURITY WARNING} comments above two crucial variables - \lstinline{SECRET_KEY} and \lstinline{DEBUG}.
 \lstinline{SECRET_KEY} is used in:
 \begin{itemize}
-    \item Generating session tokens
-    \item Generating password reset tokens
-    \item Ensuring that data passed from django forms is not changed
-    \item Generating secret URLs for temporary access to a protected resource (for example a file)
-    \item And any other cryptographic signing, unless a developer provides a different key
-          % TODO ref https://docs.djangoproject.com/en/3.2/ref/settings/#secret-key 
-          %  https://docs.djangoproject.com/en/3.2/topics/signing/
-\end{itemize}.
+      \item Generating session tokens
+      \item Generating password reset tokens
+      \item Ensuring that data passed from django forms is not changed
+      \item Generating secret URLs for temporary access to a protected resource (for example a file)
+      \item And any other cryptographic signing, unless a developer provides a different key
+\end{itemize}. \cite{djangoSecretKey} \cite{djangoSigning}
 All of them are very serious risks and should be avoided by any means. App created for this research is tiny does not have any serious logic other than working on a database model, so cryptographic signing is not used at all. For any commercial applications leaking this variable could cause a lot of harm.
 The second risky variable - \lstinline{DEBUG} - is responsible for turning on and off a debug mode. When set to True, whenever an error happens Django will display a detailed traceback, including parts of the applications source code and environment variables (such as Django settings).
 Django developers thought about it being a little secure in case of accidental leakage by excluding from the message variables containing the following strings:
 \begin{itemize}
-    \item API,
-    \item KEY,
-    \item PASS,
-    \item SECRET,
-    \item SIGNATURE,
-    \item TOKEN.
+      \item API,
+      \item KEY,
+      \item PASS,
+      \item SECRET,
+      \item SIGNATURE,
+      \item TOKEN.
 \end{itemize}
 \input{figures/djangoStackTrace.tex}
 \input{figures/djangoRequestDetails.tex}
@@ -59,46 +57,78 @@ To help the developers, Django offers a command \lstinline{python3 manage.py che
 \subsubsection{Common problems}
 There are a few things to remember when releasing any application to the world.
 \begin{enumerate}
-    \item Always use newest versions of frameworks and packages.
+      \item Always use newest versions of frameworks and packages.
 
-          Every external dependency that is brought to the project may be adding an additional vulnerability to the application. That is what vulnerability databases were created for - when someone discovers a problem in a given software it is often added to a list including vulnerability description and version of the faulty package. Snyk can be an example of a vulnerability \acrshort{db}.
-          % TODO ref https://snyk.io/vuln/
+            Every external dependency that is brought to the project may be adding an additional vulnerability to the application. That is what vulnerability databases were created for - when someone discovers a problem in a given software it is often added to a list including vulnerability description and version of the faulty package. Snyk can be an example of a vulnerability \acrshort{db}. \cite{snyk}
 
-    \item Do not configure the application to run as root
+      \item Do not configure the application to run as root
 
-          This opens a window for the attacker to run malicious scripts or starting new child processes on a server.
+            This opens a window for the attacker to run malicious scripts or starting new child processes on a server.
 
-    \item Limit request body size
+      \item Limit request body size
 
-          With unlimited sizes in body the server can be repetitively requested with large input payload, which could cause a server crash through running out of memory or keeping the processor busy.
-          % TODO ref https://nodegoat.herokuapp.com/tutorial/a5
+            With unlimited sizes in body the server can be repetitively requested with large input payload, which could cause a server crash through running out of memory or keeping the processor busy. \cite{securityMisconfiguration}
 \end{enumerate}
 
 \subsection{Injection}
-Prepared applications were tested with user creation requests containing malicious \acrshort{sql} statements. Request body was prepared based on logs shown in \ref{lst:sqlPost} to check if the input string could be terminated and any other \acrshort{sql} statement could be executed.
+Prepared applications were tested with user creation requests containing malicious \acrshort{sql} statements. Request body was prepared based on logs shown in \ref{lst:sqlPost}, to check if the input string could be terminated and any other \acrshort{sql} statement could be executed.
 \input{figures/injectionRequest.tex}
 
-\acrshort{sql} logs of the requests are placed in listings \ref{lst:aspnetInjectionLog}, \ref{lst:expressInjectionLog} and \ref{lst:djangoInjectionLog}. As shown, the characters that could cause the harm in this case are escaped (single quotes are doubled) in all applications.
+\acrshort{sql} logs of the requests are placed in listings \ref{lst:aspnetInjectionLog}, \ref{lst:expressInjectionLog} and \ref{lst:djangoInjectionLog}. As shown, the characters that could cause the harm in this case are escaped (single quotes are doubled) in all applications, resulting in creating the user normally with password containing the malicious code.
 \input{listings/aspnetInjectionLog.tex}
 \input{listings/expressInjectionLog.tex}
 \input{listings/djangoInjectionLog.tex}
 
+Additional two security test were performed, this time using path and query parameters. Retrieving users from the database required to put a user id in path, and retrieving multiple users required limit and offset variables - string termination sign was added to the values of the inputs to see the applications reaction.
+\input{figures/getInjectionRequest.tex}
+\input{figures/getManyInjectionRequest.tex}
+
+\begin{itemize}
+      \item ASP.NET Core in both cases responded with invalid request response
+            \begin{itemize}
+                  \item Get: \lstinline{"id": ["The value '5'' is not valid."]}
+                  \item GetMany: \lstinline{"limit": ["The value '100'' is not valid."]}
+            \end{itemize}
+      \item Express tried to convert both variables into integers, which in this case was not successful (input became \acrshort{nan}), and application stopped executing the function and returned invalid request response.
+      \item Django get function reacted similarly to ASP.NET, it returned invalid request response \lstinline{"detail": "Not found."}. With limit offset query it did not parse the limit argument properly and replaced it with default value instead.
+\end{itemize}
+
 Further research shown that the \acrshort{sql} injection can happen in these frameworks with careless developers. All applications provide functions which allow to perform raw \acrshort{sql} queries on the database. If a developer uses this function in the code and forgets to escape variables that include the user input results in an application that could be easily exploited.
-% DJANGO
-% https://hdivsecurity.com/sql-injection-prevention
-% TODO ref https://docs.djangoproject.com/en/3.2/topics/security/#sql-injection-protection
-% TODO ref https://docs.djangoproject.com/en/3.2/topics/db/sql/#executing-raw-queries
 
-\subsection{Insufficient Logging}
+\subsection{Insufficient logging}
+
+Lack of logging in the code may result in not knowing about the breach in the system and suspicious behavior may go unnoticed. This section is going to describe most popular logging solutions for given applications.
+
 \subsubsection{Django}
-\subsubsection{ASP.NET}
-\subsubsection{Express.js}
-% DJANGO
-% https://docs.djangoproject.com/en/3.0/topics/logging/
-% https://pypi.org/project/django-automated-logging/
-% https://pypi.org/project/django-log-viewer/
-% When your application has insufficient logging and monitoring, attacks and suspicious activity can go unnoticed. By default, Django uses the Python native logging module for system logging. 
-% django.security.* logging messages.
 
-% ASPNET
-% https://www.infoq.com/presentations/owasp-top-10-vulnerabilities-2017/
+Django has one main logging tool, which is built in Python logging system. It consists of a few parts:
+\begin{itemize}
+      \item loggers, which are instances that can register messages for processing,
+      \item handlers, which describe what happens with each message in a logger,
+      \item filters, which gives control about filtering messages to bass from logger to handler,
+      \item and formatters, which state how a log message should be written to output.
+\end{itemize}
+All these settings are to be configured within Django main config file \lstinline{settings.py} and after preparing the few lines of configuration they are ready to use.
+
+Another option to use is Django-Automated-Logging package, which automatically tracks changes in our project, like model modifications or user requests.
+
+To help with keeping track of the logs Django-Log-Viewer package may be added, which allows to browse and filter all logged messages in a built in Django admin panel.
+
+\subsubsection{ASP.NET}
+
+C\# offers a package named Microsoft.Extensions.Logging, which instance of logger can be attached directly to ASP.NET Core controllers and used in functions inside. What is more, it also can be added as middleware in the Program.cs file. They can be configured in many ways - in configuration file appsettings.json developers can specify different kinds of loggers that they intend to use in their application, specify their log level (to filter logs at later stages of development) or even specify log levels for modules that the application is using.
+
+\subsubsection{Express.js}
+
+Express.js \acrshort{npm} module named debug for logging information about routes, middlewares, requests and responses. Logs are disabled by default and to be turned on the application should be started with environment variable \lstinline{DEBUG=express:*}.
+
+To have more detailed logging external packages can be added. Winston is the most popular one, with almost 6 million weekly downloads at the moment of writing. A logger can be defined manually with custom configuration (or default can be used) and added as middleware or used directly in the function we want to log.
+
+\section{Lines of code}
+
+Process of developing the applications was different for each framework, that is why it was decided to compare the written applications with tool named \acrshort{cloc}, that counts the lines of code in given directories. After excluding the configuration files and auto-generated migration files, the results are as follows:
+\begin{enumerate}
+      \item Django - 75 lines of code,
+      \item Express.js - 156 lines of code,
+      \item ASP.NET - 182 lines of code.
+\end{enumerate}
