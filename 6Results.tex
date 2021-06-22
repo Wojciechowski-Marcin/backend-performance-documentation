@@ -4,7 +4,7 @@
 
 \section{Performance}
 
-Graphs below (\ref{tab:resultsGet}, \ref{tab:resultsGetMany}, \ref{tab:resultsDelete}, \ref{tab:resultsPost} and \ref{tab:resultsPut}) show an average response time in milliseconds by number of concurrent \acrshort{vu}s from the tests mentioned in previous chapters. To better show the results of the tests, on vertical axis a logarithmic scale has been used, as Django had very long response times in comparison to other two frameworks. Under each graph there is a table with data used to draw the mentioned graphs - average response times rounded to second decimal place. As seen on the results, in cases with small amount concurrent requests Express.js application was the fastest. Starting from 32 \acrlong{vu}s for get requests, 128 for post and put requests and 512 for getMany ASP.NET Core has faster results. The trend line in all charts (except for delete tests, where ASP.NET is slower than express in all tests by from 8\% to 49\% depending on concurrency) shows that Express.js handles bigger loads worse than ASP.NET. In most tests Django stands out very far from the others, being even up to almost 17 times slower (for get tests with 8 concurrency) than the opponents. This framework surprised on getMany tests, where it was slower by only 15\% than the second best result - ASP.NET.
+Graphs below (figures \ref{tab:resultsGet}, \ref{tab:resultsGetMany}, \ref{tab:resultsDelete}, \ref{tab:resultsPost} and \ref{tab:resultsPut}) show an average response time in milliseconds by number of concurrent \acrshort{vu}s from the tests mentioned in previous chapters. To better show the results of the tests, on vertical axis a logarithmic scale has been used, as Django had very long response times in comparison to other two frameworks. Under each graph there is a table with data used to draw the mentioned graphs - average response times rounded to second decimal place. As seen on the results, in cases with small amount concurrent requests Express.js application was the fastest. Starting from 32 \acrlong{vu}s for get requests, 128 for post and put requests and 512 for getMany ASP.NET Core has faster results. The trend line in all charts (except for delete tests, where ASP.NET is slower than express in all tests by from 8\% to 49\% depending on concurrency) shows that Express.js handles bigger loads worse than ASP.NET. In most tests Django stands out very far from the others, being even up to almost 17 times slower (for get tests with 8 concurrency) than the opponents. This framework surprised on getMany tests, where it was slower by only 15\% than the second best result - ASP.NET.
 
 \input{figures/resultsGet.tex}
 \input{tables/resultsGet.tex}
@@ -20,6 +20,20 @@ Graphs below (\ref{tab:resultsGet}, \ref{tab:resultsGetMany}, \ref{tab:resultsDe
 
 \input{figures/resultsPut.tex}
 \input{tables/resultsPut.tex}
+
+Graphs created based on InfluxDB results (average response time over time) are a reflection of the \acrshort{vu} graph from figure \ref{fig:vusPerSecond}. For all endpoints they looked very much alike, which is the reason why only two example graphs from get tests (for 8 \acrshort{vu}s and 512 \acrshort{vu}s) were placed in this section - figures \ref{fig:influxGraph8} and \ref{fig:influxGraph512}. There are a few conclusions that can be observed while analyzing the graph:
+\begin{itemize}
+      \item After 25 seconds of the tests, when the ramp down of the load is happening, at 512 \acrshort{vu}s Django average response time does not get lower immediately but only after a few seconds unlike in other cases when the drop is visible almost immediately due to long response times reaching more than 2 seconds,
+      \item The biggest difference between ASP.NET Core and Express.js for 8 VUs is visible at ramp up and ramp down periods - this further ensures that Express.js is performing better at smaller loads,
+      \item Line drawn from average response times of Express.js straight, that is why additional comparison measure - standard deviation was calculated.
+
+\end{itemize}
+\input{figures/influxGraph8VU.tex}
+\input{figures/influxGraph512VU.tex}
+
+From the results showing average response time over time a standard deviation was calculated between the 5th and 25th second of the test (ramp up and ramp down times were excluded). As the table \ref{tab:stdev} shows, on high load for all endpoints except updating models Express.js had the lowest standard deviation. This means that the application created on Express.js for deleting, retrieving and creating objects in the database is the most stable of the three.
+
+\input{tables/stdev.tex}
 
 \section{Security}
 \subsection{Security Misconfiguration}

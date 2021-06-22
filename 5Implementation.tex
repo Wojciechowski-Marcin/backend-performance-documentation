@@ -7,7 +7,7 @@
 %
 \section{Docker and Docker Compose}
 \subsection{\acrlong{pg}}
-\acrlong{pg} is built straight from the image without the need of Dockerfile, thus only the Docker Compose configuration is present. It places environment variables described in section \ref{sec:pgDbVars} from the file, creates a named volume containing the database files, reserves memory and creates a healthcheck, which allows to determine whether the container is ready to be connected to. Configuration for this service is presented in listing \ref{lst:postgresDockerCompose}
+\acrlong{pg} is built straight from the image from Docker Hub without the need of Dockerfile, thus only the Docker Compose configuration is present. It places environment variables described in section \ref{sec:pgDbVars} from the file, creates a named volume containing the database files, reserves memory and creates a healthcheck, which allows to determine whether the container is ready to be connected to. Configuration for this service is presented in listing \ref{lst:postgresDockerCompose}
 \input{listings/postgresDockerCompose.tex}
 
 \subsection{Applications}
@@ -17,7 +17,7 @@ The main differences between the Dockerfiles are the chosen images:
 \begin{itemize}
     \item Django Dockerfile was inspired by Anuj Sharma, who created one for his series of Django development guide articles \cite{djangoDockerfile} - image used is python:3.9.1-slim,
     \item For Express.js, a latest slim image of \acrshort{lts} node version was chosen - node:14.17.0-slim,
-    \item ASP.NET Core has a Dockerfile suggested by the documentation, so it was used in the application - images dotnet:2.1-sdk and dotnet:2.1-aspnetcore-runtime (multistage build) \cite{aspnetDockerfile}.
+    \item ASP.NET Core has a Dockerfile suggested by the documentation, so with slight modifications it was used in the application - images dotnet:2.1-sdk and dotnet:2.1-aspnetcore-runtime (multistage build) \cite{aspnetDockerfile}.
 \end{itemize}
 Dockerfiles were also checked by Hadolint, which is a linter that helps to build best practice Docker images \cite{hadolintGit}.
 It verifies if the Dockerfile follows the rules presented in official docker documentation \cite{dockerBestPractices}.
@@ -107,7 +107,6 @@ ASP.NET Core uses parameterized queries (in \acrlong{pg} PREPARE and EXECUTE cla
 
 In get queries, presented in listing \ref{lst:sqlGet}, the interesting part to note is the LIMIT clause - it was added automatically by both ASP.NET and Django to a value bigger than 1 - this safety limit for GET requests was introduced in case provided filters in WHERE clause matched more than exactly one object (which in this case is not intended), to be able to provide a meaningful error message.
 
-Updates and deletes (listings \ref{lst:sqlPut} and \ref{lst:sqlDelete} respectively) are preceded by select statements, that are exactly the same as in listing \ref{lst:sqlGet}.
 \input{listings/sqlGet.tex}
 \input{listings/sqlGetMany.tex}
 \input{listings/sqlPut.tex}

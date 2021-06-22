@@ -21,7 +21,7 @@ Database creation is based on environment variables, as it makes it easier for c
 
 \subsection{Initial population creation}
 
-As mentioned in subsection \ref{sub:population}, most endpoints need existing database population to work. For every application the script responsible for seeding the database looks basically the same, but for the different frameworks the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script, to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
+As mentioned in subsection \ref{sub:population}, most endpoints need existing database population to work. For every application the script responsible for seeding the database looks basically the same, but for the different frameworks the piece of code had to be adjusted to three different languages. The amount of users is parameterized and can be changed on all applications by one variable in the main script (described in section \ref{sec:mainScript}), to keep the consistency between applications and avoid potential mistakes. Users are created in bulk in a single transaction to speed up the process.
 
 Each framework (or library providing database support) has it's own built in methods for \acrshort{crud} operations, and they may be slightly different from each other. For example, Express.js and ASP.NET Core framework automatically wrap statements in a transaction. ASP.NET in each transaction sets the transaction isolation level and uses prepared statements, which then are executed with required parameters. In listings \ref{lst:aspnetPopulateLog} \ref{lst:expressPopulateLog} and \ref{lst:djangoPopulateLog} there are presented example log queries from initial user population creation.
 
@@ -97,7 +97,7 @@ For the load tests, applications were prepared with 6 endpoints:
 
 "User model" mentioned above is the JSON object consisting of fields shown in table \ref{tab:dbModel}, and "User model array" is an array of these objects.
 
-\section{Environment}
+\section{Environment}\label{sec:mainScript}
 
 The main script prepared for this thesis, that gathers all the measurements is described in the algorithm \ref{alg:testProgress}.
 
