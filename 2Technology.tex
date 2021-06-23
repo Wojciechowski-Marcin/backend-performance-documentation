@@ -46,7 +46,7 @@ To describe what Express.js is, it would be appropriate to introduce Node.js. No
 
 Express is the most popular web framework with almost 17 million weekly downloads from \acrshort{npm}. It provides mechanisms to write handlers for \acrshort{http} requests, integrate with rendering engines and handle middlewares. The minimalism of the framework is compensated by huge supply of third party libraries, which are a giant expansion to it's functionality.
 
-Express.js is an unopinionated framework, which means theres more than one "right" way to achieve a given result - there is no strict architecture that the developer has to follow.
+Express.js is an unopinionated framework, which means there is more than one "right" way to achieve a given result - there is no strict architecture that the developer has to follow.
 
 \subsection{Requirements}
 Application for the research in this thesis is very minimalistic itself, hence there are not many additional packages that need to be added. There is only one bundle downloaded from the \acrshort{npm} repository, which is pg-promise. Initially it was a package that expanded the base library called node-postgres by adding promises (\acrlong{js} way of handling asynchronous functions) to the base driver, but since then the library's functionality was vastly expanded \cite{pgPromiseGit}.
@@ -80,4 +80,4 @@ K6 allows to create visualizations, using built-in InfluxDB and Grafana integrat
 
 \section{Docker and Docker Compose}
 
-Docker is a software that allows virtualization on an operating system level (containerization). Containers wrap the applications code in a small virtual environment based on the provided configuration. Docker and Docker Compose were used to simplify the development. This made starting all services that had be run together possible with only one command, eg. for django performance tests - django, postgres, k6 and influx. For every application a production ready Dockerfile was created. Additionally, Docker provides applications a layer of isolation from each other and the host.
+Docker is a software that allows virtualization on an operating system level (containerization). Containers wrap the applications code in a small virtual environment based on the provided configuration. Docker and Docker Compose were used to simplify the development. This made starting all services that had to be run together possible with only one command, eg. for django performance tests - django, postgres, k6 and influx. For every application a production ready Dockerfile was created. Additionally, Docker provides applications a layer of isolation from each other and the host.

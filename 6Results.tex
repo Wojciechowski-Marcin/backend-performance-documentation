@@ -39,17 +39,18 @@ From the results showing average response time over time a standard deviation wa
 \subsection{Security Misconfiguration}
 \subsubsection{Django specific variables}
 Django has one configuration file, generated automatically at the project creation. At the starting lines of settings.py a few important variables and comments are placed (listing \ref{lst:djangoSettings}).
-\input{listings/djangoSettings.tex}.
+\input{listings/djangoSettings.tex}
+
 As we can see, the creators of Django clearly want the developers to prevent some security vulnerabilities, by placing \lstinline{SECURITY WARNING} comments above two crucial variables - \lstinline{SECRET_KEY} and \lstinline{DEBUG}.
-\lstinline{SECRET_KEY} is used in:
+As the documentation mentions, \lstinline{SECRET_KEY} is used in \cite{djangoSecretKey} \cite{djangoSigning}:
 \begin{itemize}
       \item Generating session tokens
       \item Generating password reset tokens
       \item Ensuring that data passed from django forms is not changed
       \item Generating secret URLs for temporary access to a protected resource (for example a file)
-      \item And any other cryptographic signing, unless a developer provides a different key
-\end{itemize}. \cite{djangoSecretKey} \cite{djangoSigning}
-All of them are very serious risks and should be avoided by any means. App created for this research is tiny does not have any serious logic other than working on a database model, so cryptographic signing is not used at all. For any commercial applications leaking this variable could cause a lot of harm.
+      \item And any other cryptographic signing, unless a developer provides a different key 
+\end{itemize}
+All of them are very serious risks and should be avoided by any means. App created for this research is tiny and does not have any serious logic other than working on a database model, so cryptographic signing is not used at all. For any commercial applications leaking this variable could cause a lot of harm.
 The second risky variable - \lstinline{DEBUG} - is responsible for turning on and off a debug mode. When set to True, whenever an error happens Django will display a detailed traceback, including parts of the applications source code and environment variables (such as Django settings).
 Django developers thought about it being a little secure in case of accidental leakage by excluding from the message variables containing the following strings:
 \begin{itemize}

@@ -48,7 +48,7 @@ For creating the initial population a management function was prepared, that is 
 \input{listings/djangoSeedDb.tex}
 
 \subsection{Routing and serialization}
-Django routing is to be placed in urls.py files. There is one main file in the project configuration folder, and one in each module. Since this application consists of only one modules, two urls.py files exist - presented in listings \ref{lst:djangoUrlsConfig} and \ref{lst:djangoUrlsApp}.
+Django routing is to be placed in urls.py files. There is one main file in the project configuration folder, and one in each module. Since this application consists of only one module, two urls.py files exist - presented in listings \ref{lst:djangoUrlsConfig} and \ref{lst:djangoUrlsApp}.
 \input{listings/djangoUrlsConfig.tex}
 \input{listings/djangoUrlsApp.tex}
 Serialization is another great thing about Django and \acrlong{drf} - \acrshort{drf} has built in abstract ModelSerializer class - to create a serializer for our model, all that needs to be done is to specify which model and which fields we want to serialize, as presented in listing \ref{lst:djangoSerialization}.
@@ -66,7 +66,7 @@ It is pretty certain at this point that django offers a lot of functionality. It
 %
 \section{Express}
 \subsection{Model}
-User model in express.js needs to contain all the necessary logic for handling \acrshort{crud} operations. Implementation of the model is shown in listing \ref{lst:expressModel} - it shows all \acrshort{sql} statements except include, which is placed in separate file. Database queries return \acrshort{json} object that is ready to be
+User model in express.js needs to contain all the necessary logic for handling \acrshort{crud} operations. Implementation of the model is shown in listing \ref{lst:expressModel} - it shows all \acrshort{sql} statements except include, which is placed in separate file. Database queries return \acrshort{json} object that is ready to be sent back.
 \input{listings/expressModel.tex}
 
 \subsection{Database connection and initialization}
@@ -88,7 +88,7 @@ Model in ASP.NET Core is a class that serves a similar purpose to Django model (
 \input{listings/aspnetModel.tex}
 
 \subsection{Database connection and initialization}
-Connection to the database looked more similar in Express.js - we need to get all environment variables, create a connection string string using them and pass them to the \acrlong{pg} provider, as shown in listing \ref{lst:aspnetDbConnection}. Initial population generation is shown in \ref{lst:aspnetSeedDb}.
+Connection to the database looked more similar in Express.js - we need to get all environment variables, create a connection string using them and pass them to the \acrlong{pg} provider, as shown in listing \ref{lst:aspnetDbConnection}. Initial population generation is shown in \ref{lst:aspnetSeedDb}.
 \input{listings/aspnetDbConnection.tex}
 \input{listings/aspnetSeedDb.tex}
 
@@ -100,7 +100,7 @@ The code for controllers is quite lengthy, but that is because routing and endpo
 % SQL
 %
 \section{\acrshort{sql} queries comparison}
-\acrshort{sql} queries are being generated differently by ASP.NET Core and Django. In case of Express.js with \acrlong{pg}, it is developers role to create them, so they were prepared to try to match the queries from the other frameworks while still being relatively simple. Logs were gathered from \acrlong{pg} in a separate test with logging turned on (for performance tests logging was completely turned off).
+\acrshort{sql} queries are being generated differently by ASP.NET Core and Django. In case of Express.js with \acrlong{pg}, it is the role of a developer to create them, so they were prepared to try to match the queries from the other frameworks while still being relatively simple. Logs were gathered from \acrlong{pg} in a separate test with logging turned on (for performance tests logging was completely turned off).
 Tables are created in the same fashion, except the primary key constraint in Django and Express.js is added right next to the definition of id field, and not separately as shown for ASP.NET in listing \ref{lst:sqlCreateTable}.
 \input{listings/sqlCreateTable.tex}
 ASP.NET Core uses parameterized queries (in \acrlong{pg} PREPARE and EXECUTE clauses), so log of the query is followed by parameters that the query was called with.
