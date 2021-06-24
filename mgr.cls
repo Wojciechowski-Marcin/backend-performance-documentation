@@ -239,12 +239,12 @@
 \if@pl
 \newcommand{\@naglowek}{PRACA DYPLOMOWA \\ MAGISTERSKA}
 \newcommand{\@napisProwadzacy}{Prowadz\k{a}cy prac\k{e}:}
-\newcommand{\@napisOcena}{Ocena pracy:}
+% \newcommand{\@napisOcena}{Ocena pracy:}
 \fi
 \if@en
 \newcommand{\@naglowek}{MASTER OF SCIENCE THESIS}
 \newcommand{\@napisProwadzacy}{Supervisor:}
-\newcommand{\@napisOcena}{Grade:}
+% \newcommand{\@napisOcena}{Grade:}
 \fi
 
 \if@eng
@@ -525,7 +525,7 @@
 {\large \@supervisor}\\
 \vfill
 \@guardian %tego nie ma jeżeli nie jest zdefiniowane, a nie powinno się definiować jeżeli prowadzący i opiekun to ta sama osoba
-{\Large\sc \@napisOcena\\[20mm]}
+% {\Large\sc \@napisOcena\\[20mm]}
 \vfill\mbox{}
 \end{minipage}}
 \end{minipage}}
